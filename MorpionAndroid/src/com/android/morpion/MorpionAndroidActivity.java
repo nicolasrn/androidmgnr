@@ -36,7 +36,7 @@ public class MorpionAndroidActivity extends Activity implements Observer
 			DataConnexion dataConnexion = (DataConnexion) data;
 			Log.d(tag, "données recues : " + dataConnexion);
 			
-			Client c = new Client(dataConnexion.getPseudo(),
+			/*Client c = */new Client(dataConnexion.getPseudo(),
 					dataConnexion.getIp(),
 					dataConnexion.getPort(),
 					dataConnexion.getIdAvatar()); 
