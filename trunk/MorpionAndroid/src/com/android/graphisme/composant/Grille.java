@@ -1,6 +1,7 @@
 package com.android.graphisme.composant;
 
 import com.android.graphisme.implementation.ActionClicCase;
+import com.android.metier.Coordonnee;
 
 import android.content.Context;
 import android.widget.LinearLayout;
@@ -9,6 +10,7 @@ public class Grille extends LinearLayout {
 	private Case matriceCase[][];
 	private int nbligne, nbcolonne;
 	public static LinearLayout.LayoutParams layoutParam;
+	public static Coordonnee coord;
 	
 	public Grille(Context context, int nbligne, int nbcolonne) {
 		super(context);
@@ -58,4 +60,7 @@ public class Grille extends LinearLayout {
 		return nbcolonne;
 	}
 
+	public Case getObjetTableauAt(int x, int y) {
+		return this.matriceCase[x][y];
+	}
 }

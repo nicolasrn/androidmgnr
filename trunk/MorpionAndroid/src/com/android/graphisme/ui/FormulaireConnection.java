@@ -1,10 +1,14 @@
 package com.android.graphisme.ui;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Observable;
 
 import com.android.metier.DataConnexion;
 import com.android.morpion.MorpionAndroidActivity;
+import com.android.reseau.client.Client;
 
 import android.content.Context;
 import android.util.Log;
@@ -30,7 +34,7 @@ public class FormulaireConnection extends LinearLayout {
 		form = new Formulaire(context);
 		
 		form.addLigne(new LigneFormulaire(context, "Saisir le pseudo"));
-		optionServeur = new String[] {"192.168.2.65"};
+		optionServeur = new String[] {"192.168.1.43"};
 		form.addLigne(new LigneFormulaire(context, "Saisir ip serveur", optionServeur));
 		optionPort = new String[] {"8000"};
 		form.addLigne(new LigneFormulaire(context, "Saisir le port", optionPort));
@@ -56,6 +60,32 @@ public class FormulaireConnection extends LinearLayout {
 				form.get(2).getData().equals("") ? optionPort[0] : form.get(2).getData(),
 				option[Integer.parseInt(form.get(3).getData())]);
 	}
+	
+	public void desactiverFormulaire()
+	{
+		desactiverFormulaire("Attente du deuxième joueur");
+	}
+	
+	public void desactiverFormulaire(String message)
+	{
+		form.desactiver();
+		boutonValider.setOnClickListener(null);
+		if (!message.isEmpty())
+			boutonValider.setText(message);
+	}
+	
+	public void activerFormulaire()
+	{
+		activerFormulaire("Valider");
+	}
+	
+	public void activerFormulaire(String message)
+	{
+		form.activer();
+		boutonValider.setOnClickListener(new ActionFormulaire(this));
+		if (!message.isEmpty())
+			boutonValider.setText(message);
+	}
 }
 
 class Formulaire extends LinearLayout
@@ -68,6 +98,16 @@ class Formulaire extends LinearLayout
 		this.lignes = new ArrayList<LigneFormulaire>(); 
 	}
 	
+	public void desactiver() {
+		for(int i = 0; i < lignes.size(); i++)
+			lignes.get(i).desactiver();
+	}
+	
+	public void activer() {
+		for(int i = 0; i < lignes.size(); i++)
+			lignes.get(i).activer();
+	}
+
 	public void addLigne(LigneFormulaire ligne)
 	{
 		this.lignes.add(ligne);
@@ -157,6 +197,16 @@ class LigneFormulaire extends LinearLayout
 		addView(this.champ, new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 	}
 	
+	public synchronized void desactiver() {
+		label.setEnabled(false);
+		champ.setEnabled(false);
+	}
+	
+	public synchronized void activer() {
+		label.setEnabled(true);
+		champ.setEnabled(true);
+	}
+
 	public LigneFormulaire(Context context, String label) {
 		this(context, label, null);
 	}
@@ -179,11 +229,35 @@ class ActionFormulaire extends Observable implements OnClickListener
 	@Override
 	public void onClick(View v) 
 	{
-		if (!form.getData().getPseudo().isEmpty())
-			this.setChanged();
+		DataConnexion data = form.getData();
+		form.desactiverFormulaire();
+		if (!data.get("pseudo").isEmpty())
+		{
+			try
+			{
+				data.createClient();
+				Client client = data.getClient();
+				
+				/*envoie des donnÈes perso, chaque joueur, type de reprÈsentation*/
+				
+				PrintWriter infoc = new PrintWriter(client.getConnectiona().getOutputStream(), false);
+				infoc.println(data.getPseudo());
+				infoc.flush();
+				
+				String info = client.attente();
+				data.createInfo(info);
+				this.setChanged();
+			}
+			catch (IOException e) 
+			{
+				form.activerFormulaire();
+				Toast.makeText(form.getContext(), "Erreur de connexion au serveur", Toast.LENGTH_LONG).show();
+			}
+		}
 		else
 			Toast.makeText(v.getContext(), "Erreur saisir le pseudo", Toast.LENGTH_LONG).show();
-		this.notifyObservers(form.getData());
+
+		this.notifyObservers(data);		
 	}
 	
 }
