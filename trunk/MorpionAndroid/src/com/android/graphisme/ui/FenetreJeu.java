@@ -54,6 +54,7 @@ public class FenetreJeu extends LinearLayout {
 		 */
 		presentation = new BandeauPresentation(context, tabPion[courant], tabPion[(courant+1)%2], def);
 		
+		//remplacer par un dp observer
 		//grille.addIEcouteurReseau(new Transmission(this));
 		Reception r = new Reception(this);
 		r.start();
