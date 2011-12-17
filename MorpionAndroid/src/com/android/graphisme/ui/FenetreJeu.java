@@ -79,7 +79,6 @@ class BandeauPresentation extends LinearLayout
 {
 	private TextView playerA, playerB, oppo;
 	private SupportGraphique imgPlayerA, imgPlayerB;
-	private String []def;
 	
 	public BandeauPresentation(Context context, PionGraphique tabPion, PionGraphique tabPion2, String[] def) {
 		super(context);
@@ -90,8 +89,6 @@ class BandeauPresentation extends LinearLayout
 		oppo = new TextView(context);
 		imgPlayerA = new SupportGraphique(context);
 		imgPlayerB = new SupportGraphique(context);
-		
-		this.def = def;
 		
 		playerA.setText(def[0]);
 		playerB.setText(def[2]);
