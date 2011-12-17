@@ -1,51 +1,68 @@
 package com.android.metier;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
+import java.util.HashMap;
+
+import com.android.reseau.client.Client;
+
 public class DataConnexion {
-	private String pseudo, ip, port;
-	private String idAvatar;
+	private HashMap<String, Object> map;
 	
-	public DataConnexion(String pseudo, String ip, String port, String idAvatar) {
-		this.pseudo = pseudo;
-		this.ip = ip;
-		this.port = port;
-		this.idAvatar = idAvatar;
+	public DataConnexion(String pseudo, String ip, String port, String avatar)
+	{
+		map = new HashMap<String, Object>();
+		
+		map.put("pseudo", pseudo);
+		map.put("ip", ip);
+		map.put("port", port);
+		map.put("avatar", avatar);
 	}
-
-	@Override
-	public String toString() {
-		return "DataConnexion [pseudo=" + pseudo + ", ip=" + ip + ", port="
-				+ port + ", idAvatar=" + idAvatar + "]";
+	
+	public String get(Object key) {
+		return "" + map.get(key);
+	}	
+	
+	public void createClient() throws NumberFormatException, UnknownHostException, IOException
+	{
+		if (!map.containsKey("client"))
+			map.put("client", new Client(get("pseudo"), get("ip"), get("port"), get("avatar")));
 	}
-
-	public String getPseudo() {
-		return pseudo;
+	
+	public void createInfo(String info)
+	{
+		map.put("info", info);
 	}
-
-	public void setPseudo(String pseudo) {
-		this.pseudo = pseudo;
+	
+	public String getPseudo()
+	{
+		return get("pseudo");
 	}
-
-	public String getIp() {
-		return ip;
+	
+	public String getIp()
+	{
+		return get("ip");
 	}
-
-	public void setIp(String ip) {
-		this.ip = ip;
+	
+	public String getPort()
+	{
+		return get("port");
 	}
-
-	public String getPort() {
-		return port;
+	
+	public String getInfo()
+	{
+		return get("info");
 	}
-
-	public void setPort(String port) {
-		this.port = port;
+	
+	public String getAvatar()
+	{
+		return get("avatar");
 	}
-
-	public String getIdAvatar() {
-		return idAvatar;
-	}
-
-	public void setIdAvatar(String idAvatar) {
-		this.idAvatar = idAvatar;
+	
+	public Client getClient()
+	{
+		if (map.containsKey("client"))
+			return (Client) map.get("client");
+		return null;
 	}
 }

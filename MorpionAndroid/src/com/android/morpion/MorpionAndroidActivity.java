@@ -1,14 +1,11 @@
 package com.android.morpion;
 
-import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.Observable;
 import java.util.Observer;
 
 import com.android.graphisme.ui.FenetreJeu;
 import com.android.graphisme.ui.FormulaireConnection;
 import com.android.metier.DataConnexion;
-import com.android.reseau.client.Client;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -31,31 +28,10 @@ public class MorpionAndroidActivity extends Activity implements Observer
 	@Override
 	public void update(Observable observable, Object data) {
 		//connexion au serveur puis lancer l'interface du morpion
-		try 
-		{
-			DataConnexion dataConnexion = (DataConnexion) data;
-			Log.d(tag, "données recues : " + dataConnexion);
-			
-			/*Client c = */new Client(dataConnexion.getPseudo(),
-					dataConnexion.getIp(),
-					dataConnexion.getPort(),
-					dataConnexion.getIdAvatar()); 
-			
-			//la grille est construite par le serveur (parametres sont juste transmis)
-			fen = new FenetreJeu(this, 3);
-			setContentView(fen);
-		}
-		catch (NumberFormatException e) 
-		{
-			e.printStackTrace();
-		}
-		catch (UnknownHostException e) 
-		{
-			e.printStackTrace();
-		}
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
+		DataConnexion dataConnexion = (DataConnexion) data;
+		Log.v(tag, "dans l'update");
+		//la grille est construite par le serveur (parametres sont juste transmis)
+		fen = new FenetreJeu(this, dataConnexion);
+		setContentView(fen);
 	}
 }
