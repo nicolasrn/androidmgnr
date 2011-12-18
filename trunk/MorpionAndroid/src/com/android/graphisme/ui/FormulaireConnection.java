@@ -11,6 +11,8 @@ import com.android.morpion.MorpionAndroidActivity;
 import com.android.reseau.client.Client;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -128,7 +130,7 @@ abstract class GetDataChamp
 	{
 		this.lf = ligneFormulaire;
 	}
-
+	
 	public abstract String getData();
 	
 	public Context getContext()
@@ -217,6 +219,86 @@ class LigneFormulaire extends LinearLayout
 	}
 }
 
+class HandlerGuiConnexion extends Handler
+{
+	private ActionFormulaire actionFormulaire;
+	
+	public HandlerGuiConnexion(ActionFormulaire actionFormulaire) {
+		this.actionFormulaire = actionFormulaire;
+	}
+
+	@Override
+	public void handleMessage(Message msg) {
+		super.handleMessage(msg);
+		switch(msg.what)
+		{
+		case 1:
+			actionFormulaire.getForm().desactiverFormulaire();
+			break;
+		case 2:
+			DataConnexion data = (DataConnexion) msg.obj;
+			actionFormulaire.setChanged();
+			actionFormulaire.notifyObservers(data);
+			break;
+		case 3:
+			actionFormulaire.getForm().activerFormulaire();
+			break;
+		}
+	}
+}
+
+class ThreadActionFormulaire extends Thread
+{
+	private DataConnexion data;
+	private ActionFormulaire actionFormulaire;
+	private HandlerGuiConnexion handler;
+	
+	public ThreadActionFormulaire(ActionFormulaire actionFormulaire, DataConnexion data)
+	{
+		this.actionFormulaire = actionFormulaire;
+		this.data = data;
+		this.handler = new HandlerGuiConnexion(this.actionFormulaire);
+	}
+	
+	@Override
+	public void run()
+	{
+		try 
+		{
+			data.createClient();
+			Client client = data.getClient();
+			//actionFormulaire.getForm().desactiverFormulaire();
+			//comme on est dans un thread il faut dŽlŽguer la tache a un handler
+			Message msg = handler.obtainMessage(1);
+			handler.sendMessage(msg);
+			
+			/*envoie des données perso, chaque joueur, type de représentation*/
+			
+			PrintWriter infoc = new PrintWriter(client.getConnectiona().getOutputStream(), false);
+			infoc.println(data.getPseudo());
+			infoc.flush();
+			
+			String info = client.attente();
+			data.createInfo(info);
+			//ceci n'est pas possible car implique une action graphique donc on passe par le handler
+			//actionFormulaire.setChanged();
+			//actionFormulaire.notifyObservers(data);
+			//ceci est bon car la rŽpercution graphique est gŽrer par un handler
+			msg = handler.obtainMessage(2);
+			msg.obj = data;
+			handler.sendMessage(msg);
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+			//actionFormulaire.getForm().activerFormulaire();
+			//idem en cas d'erreur
+			Message msg = handler.obtainMessage(3);
+			handler.sendMessage(msg);
+		}
+	}
+}
+
 class ActionFormulaire extends Observable implements OnClickListener
 {
 	private FormulaireConnection form;
@@ -226,19 +308,28 @@ class ActionFormulaire extends Observable implements OnClickListener
 		this.addObserver((MorpionAndroidActivity)form.getContext());
 	}
 
+	public FormulaireConnection getForm() {
+		return form;
+	}
+
 	@Override
 	public void onClick(View v) 
 	{
+		Thread t = null;
 		DataConnexion data = form.getData();
-		form.desactiverFormulaire();
 		if (!data.get("pseudo").isEmpty())
 		{
-			try
-			{
+			t = new ThreadActionFormulaire(this, data);
+			t.start();
+			/*try {
 				data.createClient();
 				Client client = data.getClient();
+				//this.getForm().desactiverFormulaire();
+				//comme on est dans un thread il faut dŽlŽguer la tache a un handler
+				Message msg = handler.obtainMessage(1);
+				handler.sendMessage(msg);
 				
-				/*envoie des données perso, chaque joueur, type de représentation*/
+				//envoie des données perso, chaque joueur, type de représentation
 				
 				PrintWriter infoc = new PrintWriter(client.getConnectiona().getOutputStream(), false);
 				infoc.println(data.getPseudo());
@@ -247,17 +338,28 @@ class ActionFormulaire extends Observable implements OnClickListener
 				String info = client.attente();
 				data.createInfo(info);
 				this.setChanged();
-			}
+			} 
 			catch (IOException e) 
 			{
-				form.activerFormulaire();
-				Toast.makeText(form.getContext(), "Erreur de connexion au serveur", Toast.LENGTH_LONG).show();
-			}
+				e.printStackTrace();
+				//this.getForm().activerFormulaire();
+				//idem en cas d'erreur
+				Message msg = handler.obtainMessage(2);
+				handler.sendMessage(msg);
+			}*/
 		}
 		else
 			Toast.makeText(v.getContext(), "Erreur saisir le pseudo", Toast.LENGTH_LONG).show();
+		
+		//this.notifyObservers(data);
+	}
 
-		this.notifyObservers(data);		
+	public void setChanged() {
+		super.setChanged();
 	}
 	
+	public void notifyObservers(Object data)
+	{
+		super.notifyObservers(data);
+	}
 }

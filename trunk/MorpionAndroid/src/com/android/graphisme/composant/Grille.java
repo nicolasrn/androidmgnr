@@ -24,7 +24,7 @@ public class Grille extends LinearLayout implements Observer {
 		this.nbligne = nbligne;
 		this.trans = null;
 		
-		matriceCase = new Case[nbcolonne][nbligne];
+		matriceCase = new Case[nbligne][nbcolonne];
 		layoutParam = new LinearLayout.LayoutParams(70, 70, 0);
 		
 		this.setOrientation(LinearLayout.VERTICAL);
@@ -33,8 +33,8 @@ public class Grille extends LinearLayout implements Observer {
 			LinearLayout ligne = new LinearLayout(context);
 			for(int j = 0; j < nbcolonne; j++)
 			{
-				matriceCase[i][j] = new Case(context, i, j);
-				ligne.addView(matriceCase[i][j], layoutParam);
+				matriceCase[j][i] = new Case(context, j, i);
+				ligne.addView(matriceCase[j][i], layoutParam);
 			}
 			this.addView(ligne);
 		}
