@@ -25,7 +25,7 @@ public class FenetreJeu extends LinearLayout {
 	
 	private int tailleGrille;
 	public static PionGraphique[] tabPion;
-
+	
 	public static int courant;
 	
 	public FenetreJeu(Context context, DataConnexion data) {
@@ -60,7 +60,6 @@ public class FenetreJeu extends LinearLayout {
 		Reception r = new Reception(this);
 		r.start();
 		
-		//this.grille = new Grille(context, nbLigne, nbLigne);
 		this.setOrientation(LinearLayout.VERTICAL);
 		this.addView(presentation);
 		this.addView(grille);
