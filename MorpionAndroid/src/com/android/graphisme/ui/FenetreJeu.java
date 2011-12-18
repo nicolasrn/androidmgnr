@@ -24,6 +24,7 @@ public class FenetreJeu extends LinearLayout {
 	private String info;
 	
 	private int tailleGrille;
+	
 	public static PionGraphique[] tabPion;
 	
 	public static int courant;
