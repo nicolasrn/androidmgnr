@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 
+import android.util.Log;
+
+import com.android.morpion.MorpionAndroidActivity;
 import com.android.reseau.client.Client;
 
 public class DataConnexion {
@@ -25,6 +28,7 @@ public class DataConnexion {
 	
 	public void createClient() throws NumberFormatException, UnknownHostException, IOException
 	{
+		Log.v(MorpionAndroidActivity.tag, get("pseudo") + " " + get("ip") + " " + get("port") + " " + get("avatar"));
 		if (!map.containsKey("client"))
 			map.put("client", new Client(get("pseudo"), get("ip"), get("port"), get("avatar")));
 	}
@@ -64,5 +68,10 @@ public class DataConnexion {
 		if (map.containsKey("client"))
 			return (Client) map.get("client");
 		return null;
+	}
+
+	@Override
+	public String toString() {
+		return "DataConnexion [map=" + map + "]";
 	}
 }

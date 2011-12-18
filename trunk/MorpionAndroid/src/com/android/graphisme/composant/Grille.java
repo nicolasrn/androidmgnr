@@ -6,8 +6,10 @@ import java.util.Observer;
 import com.android.graphisme.implementation.ActionClicCase;
 import com.android.graphisme.implementation.Transmission;
 import com.android.metier.Coordonnee;
+import com.android.morpion.MorpionAndroidActivity;
 
 import android.content.Context;
+import android.view.Display;
 import android.widget.LinearLayout;
 
 public class Grille extends LinearLayout implements Observer {
@@ -24,8 +26,13 @@ public class Grille extends LinearLayout implements Observer {
 		this.nbligne = nbligne;
 		this.trans = null;
 		
+		Display ecran = ((MorpionAndroidActivity)context).getWindowManager().getDefaultDisplay();
+		int largeur= ecran.getWidth();
+		int hauteur= ecran.getHeight();
+		int taille = Math.min(largeur, hauteur)/nbligne;
+		
 		matriceCase = new Case[nbligne][nbcolonne];
-		layoutParam = new LinearLayout.LayoutParams(70, 70, 0);
+		layoutParam = new LinearLayout.LayoutParams(taille, taille, 0);
 		
 		this.setOrientation(LinearLayout.VERTICAL);
 		for(int i = 0; i < nbligne; i++)

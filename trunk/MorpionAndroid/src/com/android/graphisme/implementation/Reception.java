@@ -3,7 +3,6 @@ package com.android.graphisme.implementation;
 import java.io.IOException;
 
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;

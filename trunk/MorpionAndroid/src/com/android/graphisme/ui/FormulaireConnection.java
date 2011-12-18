@@ -2,6 +2,7 @@ package com.android.graphisme.ui;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -54,7 +55,7 @@ public class FormulaireConnection extends LinearLayout {
 
 	public DataConnexion getData()
 	{
-		Log.v(MorpionAndroidActivity.tag, "id du selectionné : " + Integer.parseInt(form.get(3).getData()) + "");
+		//Log.v(MorpionAndroidActivity.tag, "id du selectionné : " + Integer.parseInt(form.get(3).getData()) + "");
 		
 		return new DataConnexion(form.get(0).getData(), 
 				form.get(1).getData().equals("") ? optionServeur[0] : form.get(1).getData(), 
@@ -71,7 +72,6 @@ public class FormulaireConnection extends LinearLayout {
 	{
 		form.desactiver();
 		boutonValider.setOnClickListener(null);
-		//if (!message.isEmpty())
 		if (!message.equals(""))
 			boutonValider.setText(message);
 	}
@@ -233,14 +233,17 @@ class HandlerGuiConnexion extends Handler
 		switch(msg.what)
 		{
 		case 1:
+			Log.v(MorpionAndroidActivity.tag, "handler cas 1");
 			actionFormulaire.getForm().desactiverFormulaire();
 			break;
 		case 2:
+			Log.v(MorpionAndroidActivity.tag, "handler cas 2");
 			DataConnexion data = (DataConnexion) msg.obj;
 			actionFormulaire.setChanged();
 			actionFormulaire.notifyObservers(data);
 			break;
 		case 3:
+			Log.v(MorpionAndroidActivity.tag, "handler cas 3");
 			actionFormulaire.getForm().activerFormulaire();
 			break;
 		}
@@ -255,6 +258,7 @@ class ThreadActionFormulaire extends Thread
 	
 	public ThreadActionFormulaire(ActionFormulaire actionFormulaire, DataConnexion data)
 	{
+		Log.v(MorpionAndroidActivity.tag, "instanciation du thread");
 		this.actionFormulaire = actionFormulaire;
 		this.data = data;
 		this.handler = new HandlerGuiConnexion(this.actionFormulaire);
@@ -263,10 +267,12 @@ class ThreadActionFormulaire extends Thread
 	@Override
 	public void run()
 	{
-		try 
+		try
 		{
-			data.createClient();
-			Client client = data.getClient();
+			Log.v(MorpionAndroidActivity.tag, "Lancement du run du thread");
+			this.data.createClient();
+			Log.v(MorpionAndroidActivity.tag, "données récupérées : " + this.data);
+			Client client = this.data.getClient();
 			//actionFormulaire.getForm().desactiverFormulaire();
 			//comme on est dans un thread il faut déléguer la tache a un handler
 			Message msg = handler.obtainMessage(1);
@@ -279,18 +285,34 @@ class ThreadActionFormulaire extends Thread
 			infoc.flush();
 			
 			String info = client.attente();
-			data.createInfo(info);
+			this.data.createInfo(info);
 			//ceci n'est pas possible car implique une action graphique donc on passe par le handler
 			//actionFormulaire.setChanged();
 			//actionFormulaire.notifyObservers(data);
 			//ceci est bon car la répercution graphique est gérer par un handler
 			msg = handler.obtainMessage(2);
-			msg.obj = data;
+			msg.obj = this.data;
+			handler.sendMessage(msg);
+		} 
+		catch (NumberFormatException e)
+		{
+			Log.e(MorpionAndroidActivity.tag, "erreur NumberFormatException : " + e.getMessage() + " " + e.getCause());
+			//actionFormulaire.getForm().activerFormulaire();
+			//idem en cas d'erreur
+			Message msg = handler.obtainMessage(3);
+			handler.sendMessage(msg);
+		} 
+		catch (UnknownHostException e) 
+		{
+			Log.e(MorpionAndroidActivity.tag, "erreur UnknownHostException : " + e.getMessage() + " " + e.getCause());
+			//actionFormulaire.getForm().activerFormulaire();
+			//idem en cas d'erreur
+			Message msg = handler.obtainMessage(3);
 			handler.sendMessage(msg);
 		} 
 		catch (IOException e) 
 		{
-			e.printStackTrace();
+			Log.e(MorpionAndroidActivity.tag, "erreur IOException : " + e.getMessage() + " " + e.getCause());
 			//actionFormulaire.getForm().activerFormulaire();
 			//idem en cas d'erreur
 			Message msg = handler.obtainMessage(3);
@@ -315,23 +337,31 @@ class ActionFormulaire extends Observable implements OnClickListener
 	@Override
 	public void onClick(View v) 
 	{
+		Log.v(MorpionAndroidActivity.tag, "Dans le onClick");
 		Thread t = null;
 		DataConnexion data = form.getData();
+		Log.v(MorpionAndroidActivity.tag, "données récupérées avant thread : " + data);
+		
 		if (!data.get("pseudo").equals(""))
 		{
 			t = new ThreadActionFormulaire(this, data);
 			t.start();
 		}
 		else
+		{
+			Log.v(MorpionAndroidActivity.tag, "pseudo vide");
 			Toast.makeText(v.getContext(), "Erreur saisir le pseudo", Toast.LENGTH_LONG).show();
+		}
 	}
 
 	public void setChanged() {
+		Log.v(MorpionAndroidActivity.tag, "setchanged ok");
 		super.setChanged();
 	}
 	
 	public void notifyObservers(Object data)
 	{
+		Log.v(MorpionAndroidActivity.tag, "notifyobservers ok");
 		super.notifyObservers(data);
 	}
 }
