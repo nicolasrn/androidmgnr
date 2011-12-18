@@ -23,11 +23,15 @@ public class Coordonnee
 	 * construit l'objet a partir d'une String sous la forme x;y 
 	 * @param x
 	 */
-	public Coordonnee (String x)
+	public Coordonnee (String str)
 	{
-		this.x= Integer.parseInt(x.substring(0,x.indexOf(";")));
-		this.y= Integer.parseInt(x.substring(x.indexOf(";")+1));
+		System.out.println("Coordonnée recu par le serveur : " + str);
 		
+		this.x= Integer.parseInt(str.substring(0,str.indexOf(";")));
+		System.out.println("Coordonnée x recu par le serveur : " + this.x);
+		
+		this.y= Integer.parseInt(str.substring(str.indexOf(";")+1));
+		System.out.println("Coordonnée y recu par le serveur : " + this.y);
 	}
 	
 	/**
@@ -67,7 +71,7 @@ public class Coordonnee
 	 */
 	@Override
 	public String toString() {
-		return x + "; " + y ;
+		return x + ";" + y ;
 	}
 
 	/* (non-Javadoc)
