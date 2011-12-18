@@ -2,7 +2,6 @@ package com.android.graphisme.ui;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -321,37 +320,9 @@ class ActionFormulaire extends Observable implements OnClickListener
 		{
 			t = new ThreadActionFormulaire(this, data);
 			t.start();
-			/*try {
-				data.createClient();
-				Client client = data.getClient();
-				//this.getForm().desactiverFormulaire();
-				//comme on est dans un thread il faut dŽlŽguer la tache a un handler
-				Message msg = handler.obtainMessage(1);
-				handler.sendMessage(msg);
-				
-				//envoie des données perso, chaque joueur, type de représentation
-				
-				PrintWriter infoc = new PrintWriter(client.getConnectiona().getOutputStream(), false);
-				infoc.println(data.getPseudo());
-				infoc.flush();
-				
-				String info = client.attente();
-				data.createInfo(info);
-				this.setChanged();
-			} 
-			catch (IOException e) 
-			{
-				e.printStackTrace();
-				//this.getForm().activerFormulaire();
-				//idem en cas d'erreur
-				Message msg = handler.obtainMessage(2);
-				handler.sendMessage(msg);
-			}*/
 		}
 		else
 			Toast.makeText(v.getContext(), "Erreur saisir le pseudo", Toast.LENGTH_LONG).show();
-		
-		//this.notifyObservers(data);
 	}
 
 	public void setChanged() {
