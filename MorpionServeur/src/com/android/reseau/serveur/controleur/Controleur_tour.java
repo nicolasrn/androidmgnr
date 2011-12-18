@@ -102,7 +102,7 @@ public class Controleur_tour {
 			outg.println("win");
 			outg.flush();
 			
-			Connexion_bdd.envoi_gagne(tab_socket[tour].getJoueur(), tab_socket[(tour+1)%2].getJoueur());
+			//Connexion_bdd.envoi_gagne(tab_socket[tour].getJoueur(), tab_socket[(tour+1)%2].getJoueur());
 			
 			// le perdant
 			out.println("lose");
@@ -114,15 +114,15 @@ public class Controleur_tour {
 			outg.println("matchnull");
 			outg.flush();
 			
-			Connexion_bdd.envoi_nul(tab_socket[tour].getJoueur(), tab_socket[(tour+1)%2].getJoueur());
+			//Connexion_bdd.envoi_nul(tab_socket[tour].getJoueur(), tab_socket[(tour+1)%2].getJoueur());
 			
 			// le perdant
 			out.println("matchnull");
 			out.flush();
 		}
-		out.println(Connexion_bdd.Affiche_score());
+		/*out.println(Connexion_bdd.Affiche_score());
 		out.flush();
 		outg.println(Connexion_bdd.Affiche_score());
-		outg.flush();
+		outg.flush();*/
 	}
 }
