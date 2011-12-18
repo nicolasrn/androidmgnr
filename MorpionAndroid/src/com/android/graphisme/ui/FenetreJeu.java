@@ -2,16 +2,16 @@ package com.android.graphisme.ui;
 
 import com.android.graphisme.composant.Grille;
 import com.android.graphisme.composant.PionGraphique;
-import com.android.graphisme.composant.PionJ1;
-import com.android.graphisme.composant.PionJ2;
 import com.android.graphisme.composant.SupportGraphique;
 import com.android.graphisme.implementation.Reception;
 import com.android.graphisme.implementation.Transmission;
 import com.android.graphisme.ui.cor.FacadeCor;
 import com.android.metier.DataConnexion;
+import com.android.morpion.MorpionAndroidActivity;
 import com.android.reseau.interpretation.Interpreteur;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,7 +20,7 @@ public class FenetreJeu extends LinearLayout {
 	private BandeauPresentation presentation;
 	
 	private Interpreteur interpret;
-	private DataConnexion data;
+	//private DataConnexion data;
 	private String info;
 	
 	private int tailleGrille;
@@ -30,10 +30,13 @@ public class FenetreJeu extends LinearLayout {
 	
 	public FenetreJeu(Context context, DataConnexion data) {
 		super(context);
-		this.data = data;
+		//this.data = data;
 		this.info = data.getInfo();
 		this.interpret = new Interpreteur(data.getClient());
 		tabPion = FacadeCor.getCor().resoudre(data.getClient().getType());
+		
+		for(PionGraphique p : tabPion)
+			Log.v(MorpionAndroidActivity.tag, "" + p.getClass());
 		
 		//private String info = "joueur1;0;joueur2;1;tailleGrille";
 		//nom joueur courant; numero courant; nom joueur suivant; numero joueur suivant; taille de la grille
@@ -78,7 +81,7 @@ class BandeauPresentation extends LinearLayout
 	private TextView playerA, playerB, oppo;
 	private SupportGraphique imgPlayerA, imgPlayerB;
 	
-	public BandeauPresentation(Context context, PionGraphique tabPion, PionGraphique tabPion2, String[] def) {
+	public BandeauPresentation(Context context, PionGraphique pionj1, PionGraphique pionj2, String[] def) {
 		super(context);
 		this.setOrientation(LinearLayout.HORIZONTAL);
 		
@@ -92,8 +95,8 @@ class BandeauPresentation extends LinearLayout
 		playerB.setText(def[2]);
 		oppo.setText("versus");
 		
-		imgPlayerA.setPionGraphique(new PionJ1());
-		imgPlayerB.setPionGraphique(new PionJ2());
+		imgPlayerA.setPionGraphique(pionj1);
+		imgPlayerB.setPionGraphique(pionj2);
 		
 		LayoutParams param = new LayoutParams(0, LayoutParams.WRAP_CONTENT, 1);
 		this.addView(playerA, param);

@@ -38,7 +38,7 @@ public class Grille extends LinearLayout implements Observer {
 			}
 			this.addView(ligne);
 		}
-		activerGrille();
+		//activerGrille();
 	}
 	
 	public void activerGrille()
