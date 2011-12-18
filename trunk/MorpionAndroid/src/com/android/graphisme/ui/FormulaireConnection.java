@@ -71,7 +71,8 @@ public class FormulaireConnection extends LinearLayout {
 	{
 		form.desactiver();
 		boutonValider.setOnClickListener(null);
-		if (!message.isEmpty())
+		//if (!message.isEmpty())
+		if (!message.equals(""))
 			boutonValider.setText(message);
 	}
 	
@@ -84,7 +85,7 @@ public class FormulaireConnection extends LinearLayout {
 	{
 		form.activer();
 		boutonValider.setOnClickListener(new ActionFormulaire(this));
-		if (!message.isEmpty())
+		if (!message.equals(""))
 			boutonValider.setText(message);
 	}
 }
@@ -316,7 +317,7 @@ class ActionFormulaire extends Observable implements OnClickListener
 	{
 		Thread t = null;
 		DataConnexion data = form.getData();
-		if (!data.get("pseudo").isEmpty())
+		if (!data.get("pseudo").equals(""))
 		{
 			t = new ThreadActionFormulaire(this, data);
 			t.start();
