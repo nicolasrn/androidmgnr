@@ -2,8 +2,6 @@ package com.android.graphisme.implementation;
 
 import java.io.IOException;
 
-import javax.swing.JOptionPane;
-
 import android.widget.Toast;
 
 import com.android.graphisme.composant.Case;
