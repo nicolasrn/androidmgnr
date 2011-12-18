@@ -47,6 +47,11 @@ public class Case extends LinearLayout {
 		this.addView(bouton, Grille.layoutParam);
 	}
 	
+	public Coordonnee getCoordonee()
+	{
+		return coord;
+	}
+	
 	public int getX() {
 		return coord.x;
 	}

@@ -67,7 +67,7 @@ public class Coordonnee
 	 */
 	@Override
 	public String toString() {
-		return x + ", " + y ;
+		return x + "; " + y ;
 	}
 
 	/* (non-Javadoc)

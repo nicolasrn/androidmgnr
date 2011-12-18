@@ -1,14 +1,20 @@
 package com.android.graphisme.composant;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import com.android.graphisme.implementation.ActionClicCase;
+import com.android.graphisme.implementation.Transmission;
 import com.android.metier.Coordonnee;
 
 import android.content.Context;
 import android.widget.LinearLayout;
 
-public class Grille extends LinearLayout {
+public class Grille extends LinearLayout implements Observer {
 	private Case matriceCase[][];
 	private int nbligne, nbcolonne;
+	private Transmission trans;
+	
 	public static LinearLayout.LayoutParams layoutParam;
 	public static Coordonnee coord;
 	
@@ -16,6 +22,7 @@ public class Grille extends LinearLayout {
 		super(context);
 		this.nbcolonne = nbcolonne;
 		this.nbligne = nbligne;
+		this.trans = null;
 		
 		matriceCase = new Case[nbcolonne][nbligne];
 		layoutParam = new LinearLayout.LayoutParams(70, 70, 0);
@@ -62,5 +69,15 @@ public class Grille extends LinearLayout {
 
 	public Case getObjetTableauAt(int x, int y) {
 		return this.matriceCase[x][y];
+	}
+
+	@Override
+	public void update(Observable observable, Object data) {
+		Case c = (Case)data;
+		trans.transmettreMessage(c);
+	}
+
+	public void addEcouteurReseau(Transmission transmission) {
+		trans = transmission;
 	}
 }

@@ -9,7 +9,6 @@ import com.android.graphisme.implementation.Reception;
 import com.android.graphisme.implementation.Transmission;
 import com.android.graphisme.ui.cor.FacadeCor;
 import com.android.metier.DataConnexion;
-import com.android.reseau.client.Client;
 import com.android.reseau.interpretation.Interpreteur;
 
 import android.content.Context;
@@ -28,7 +27,6 @@ public class FenetreJeu extends LinearLayout {
 	public static PionGraphique[] tabPion;
 
 	public static int courant;
-	
 	
 	public FenetreJeu(Context context, DataConnexion data) {
 		super(context);
@@ -55,7 +53,7 @@ public class FenetreJeu extends LinearLayout {
 		presentation = new BandeauPresentation(context, tabPion[courant], tabPion[(courant+1)%2], def);
 		
 		//remplacer par un dp observer
-		//grille.addIEcouteurReseau(new Transmission(this));
+		grille.addEcouteurReseau(new Transmission(this));
 		Reception r = new Reception(this);
 		r.start();
 		
