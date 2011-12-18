@@ -106,7 +106,7 @@ public class Jeu extends Thread{
 			 */
 			
 			ctrltr.envoiResultat(nbcoup == g.getNb_case() * g.getNb_case());
-			System.out.println(Connexion_bdd.Affiche_score());
+			//System.out.println(Connexion_bdd.Affiche_score());
 		}
 		catch (IOException e) 
 		{
