@@ -20,7 +20,7 @@ public class FenetreJeu extends LinearLayout {
 	private BandeauPresentation presentation;
 	
 	private Interpreteur interpret;
-	private DataConnexion data;
+	//private DataConnexion data;
 	private String info;
 	
 	private int tailleGrille;
@@ -30,7 +30,7 @@ public class FenetreJeu extends LinearLayout {
 	
 	public FenetreJeu(Context context, DataConnexion data) {
 		super(context);
-		this.data = data;
+		//this.data = data;
 		this.info = data.getInfo();
 		this.interpret = new Interpreteur(data.getClient());
 		tabPion = FacadeCor.getCor().resoudre(data.getClient().getType());

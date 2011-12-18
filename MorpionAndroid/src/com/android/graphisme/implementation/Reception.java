@@ -2,17 +2,21 @@ package com.android.graphisme.implementation;
 
 import java.io.IOException;
 
-import javax.swing.JOptionPane;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 
 import com.android.graphisme.ui.FenetreJeu;
 import com.android.metier.Coordonnee;
+import com.android.morpion.MorpionAndroidActivity;
 
 /**
  * implementation de l'ecouteur reseau -> client pour la mise a jour de l'Ètat graphique
  */
 public class Reception extends Thread 
 {
-	FenetreJeu f;
+	private FenetreJeu f;
+	private GuiHandler handler;
 	
 	/**
 	 * 
@@ -21,6 +25,7 @@ public class Reception extends Thread
 	public Reception(FenetreJeu jeu) 
 	{
 		f = jeu;
+		handler = new GuiHandler(f);
 	}
 	
 	/**
@@ -38,9 +43,13 @@ public class Reception extends Thread
 			String ordre = f.getIterpret().reception_serveur();
 			Coordonnee c = null;
 			
+			Log.v(MorpionAndroidActivity.tag, "ordre : " + ordre);
 			if (ordre.equals("joue"))
 			{
-				f.getGrille().activerGrille();
+				//f.getGrille().activerGrille();
+                Message msg = handler.obtainMessage();
+                msg.arg1 = 1;
+                handler.sendMessage(msg);
 			}
 			else if (ordre.equals("win"))
 			{
@@ -75,9 +84,13 @@ public class Reception extends Thread
 			
 			if (c != null)
 			{
+                Message msg = handler.obtainMessage();
+                msg.arg1 = 2;
+                msg.obj = c;
+                handler.sendMessage(msg);
 				//f.getGrille().getObjetTableauAt(c.x, c.y).activerImage(MImage.img1);
-				f.getGrille().getObjetTableauAt(c.x, c.y).activerImage(FenetreJeu.tabPion[(FenetreJeu.courant+1)%2]);
-				f.getGrille().activerGrille();
+				//f.getGrille().getObjetTableauAt(c.x, c.y).activerImage(FenetreJeu.tabPion[(FenetreJeu.courant+1)%2]);
+				//f.getGrille().activerGrille();
 			}
 		}while(true);
 	} 
@@ -95,3 +108,30 @@ public class Reception extends Thread
 		}
 	}
 }
+
+class GuiHandler extends Handler 
+{
+	private FenetreJeu f;
+	
+	public GuiHandler(FenetreJeu f)
+	{
+		this.f = f;
+	}
+	
+	@Override
+	public void handleMessage(Message msg) {
+		Log.v(MorpionAndroidActivity.tag, "je suis la c'est déja pas si mal");
+		switch(msg.arg1)
+		{
+		case 1:
+			Log.v(MorpionAndroidActivity.tag, "msg.what ok");
+			f.getGrille().activerGrille();
+			break;
+		case 2:
+			Coordonnee c = (Coordonnee)msg.obj;
+			f.getGrille().getObjetTableauAt(c.x, c.y).activerImage(FenetreJeu.tabPion[(FenetreJeu.courant+1)%2]);
+			f.getGrille().activerGrille();
+			break;
+		}
+	}
+};
