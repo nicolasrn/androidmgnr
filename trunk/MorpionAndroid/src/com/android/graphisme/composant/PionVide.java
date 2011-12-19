@@ -14,4 +14,9 @@ public class PionVide extends PionGraphique {
 		canvas.drawText("coucou", 20, 20, p);
 	}
 
+	@Override
+	public void traceLogo(Canvas canvas, Resources resource) {
+		trace(canvas, resource);
+	}
+
 }

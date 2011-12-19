@@ -11,7 +11,7 @@ public class Serveur extends Thread
 {
 	private static final int port = 8000;
 	private ServerSocket serv = null;
-	public static final int tailleGrille = 3;
+	public static final int tailleGrille = 5;
 	
 	public Serveur() throws IOException
 	{

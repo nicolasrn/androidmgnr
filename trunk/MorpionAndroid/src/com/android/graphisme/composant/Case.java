@@ -32,7 +32,7 @@ public class Case extends LinearLayout {
 		pion.setPionGraphique(p);
 		
 		this.removeView(bouton);
-		this.addView(pion, Grille.layoutParam);
+		this.addView(pion, Util.getInstance().getLayoutParamsGrille());
 		
 		pion.invalidate();
 	}
@@ -44,7 +44,7 @@ public class Case extends LinearLayout {
 	
 	public void activerBouton()
 	{
-		this.addView(bouton, Grille.layoutParam);
+		this.addView(bouton, Util.getInstance().getLayoutParamsGrille());
 	}
 	
 	public Coordonnee getCoordonee()

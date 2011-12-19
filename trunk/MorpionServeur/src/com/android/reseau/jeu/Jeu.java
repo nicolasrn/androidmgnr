@@ -129,7 +129,7 @@ public class Jeu extends Thread{
 			catch(IOException ioe)
 			{
 				System.out.print("client1 deconnecté");
-				Connexion_bdd.envoi_abandon(client1.getJoueur(), client2.getJoueur());
+				//Connexion_bdd.envoi_abandon(client1.getJoueur(), client2.getJoueur());
 
 			}
 			
@@ -146,7 +146,7 @@ public class Jeu extends Thread{
 			catch(IOException ioe)
 			{
 				System.out.println("client2 deconnecté");
-				Connexion_bdd.envoi_abandon(client2.getJoueur(), client1.getJoueur());
+				//Connexion_bdd.envoi_abandon(client2.getJoueur(), client1.getJoueur());
 			
 			}
 		}

@@ -1,8 +1,10 @@
 package com.android.graphisme.ui;
 
+import com.android.graphisme.composant.BandeauPresentation;
 import com.android.graphisme.composant.Grille;
 import com.android.graphisme.composant.PionGraphique;
 import com.android.graphisme.composant.SupportGraphique;
+import com.android.graphisme.composant.Util;
 import com.android.graphisme.implementation.Reception;
 import com.android.graphisme.implementation.Transmission;
 import com.android.graphisme.ui.cor.FacadeCor;
@@ -45,7 +47,8 @@ public class FenetreJeu extends LinearLayout {
 		
 		courant = Integer.parseInt(def[1]);
 		tailleGrille = Integer.parseInt(def[4]);
-
+		Util.getInstance(context, tailleGrille);
+		
 		/*
 		 * definition de la grille
 		 */
@@ -74,37 +77,4 @@ public class FenetreJeu extends LinearLayout {
 		return grille;
 	}
 
-}
-
-class BandeauPresentation extends LinearLayout
-{
-	private TextView playerA, playerB, oppo;
-	private SupportGraphique imgPlayerA, imgPlayerB;
-	
-	public BandeauPresentation(Context context, PionGraphique pionj1, PionGraphique pionj2, String[] def) {
-		super(context);
-		this.setOrientation(LinearLayout.HORIZONTAL);
-		
-		playerA = new TextView(context);
-		playerB = new TextView(context);
-		oppo = new TextView(context);
-		imgPlayerA = new SupportGraphique(context);
-		imgPlayerB = new SupportGraphique(context);
-		
-		playerA.setText(def[0]);
-		playerB.setText(def[2]);
-		oppo.setText("versus");
-		
-		imgPlayerA.setPionGraphique(pionj1);
-		imgPlayerB.setPionGraphique(pionj2);
-		
-		LayoutParams param = new LayoutParams(0, LayoutParams.WRAP_CONTENT, 1);
-		this.addView(playerA, param);
-		this.addView(imgPlayerA, Grille.layoutParam);
-		
-		this.addView(oppo, param);
-
-		this.addView(playerB, param);
-		this.addView(imgPlayerB, Grille.layoutParam);
-	}
 }
