@@ -9,8 +9,6 @@ import com.android.reseau.serveur.controleur.*;
 import com.android.reseau.serveur.element.*;
 import com.android.reseau.sql.Connexion_bdd;
 
-
-
 public class Jeu extends Thread{
 	/**
 	 * Grille g : le jeu est composé d'une grille
