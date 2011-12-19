@@ -18,7 +18,18 @@ public class PionJ1Deg extends PionGraphique {
 		
 		if (imageType1 == null)
 			imageType1 = BitmapFactory.decodeResource(resource, R.drawable.oqqmkefn);
-		canvas.drawBitmap(imageType1, new Rect(0, 0, imageType1.getWidth(), imageType1.getHeight()), new Rect(0, 0, Grille.layoutParam.width, Grille.layoutParam.height), p);
+		canvas.drawBitmap(imageType1, new Rect(0, 0, imageType1.getWidth(), imageType1.getHeight()), new Rect(0, 0, Util.getInstance().getLayoutParamsGrille().width, Util.getInstance().getLayoutParamsGrille().height), p);
+	}
+
+	@Override
+	public void traceLogo(Canvas canvas, Resources resource) {
+		Paint p = new Paint();
+		p.setColor(Color.RED);
+		
+		if (imageType1 == null)
+			imageType1 = BitmapFactory.decodeResource(resource, R.drawable.oqqmkefn);
+		canvas.drawBitmap(imageType1, new Rect(0, 0, imageType1.getWidth(), imageType1.getHeight()), new Rect(0, 0, Util.getInstance().getLayoutParamsBandeau().width, Util.getInstance().getLayoutParamsBandeau().height), p);
+	
 	}
 
 }

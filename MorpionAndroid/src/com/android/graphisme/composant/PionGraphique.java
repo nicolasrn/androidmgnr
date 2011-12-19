@@ -15,6 +15,7 @@ public abstract class PionGraphique {
 	 */
 	protected static Bitmap imageType2;
 	
-	public abstract void trace(Canvas canvas, Resources resources);
+	public abstract void trace(Canvas canvas, Resources resource);
 	
+	public abstract void traceLogo(Canvas canvas, Resources resource);
 }
