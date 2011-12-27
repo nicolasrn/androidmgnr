@@ -24,7 +24,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class FormulaireConnection extends LinearLayout {
+public class FormulaireConnection extends LinearLayout implements RecuperableData {
 	private Formulaire form;
 	private Button boutonValider;
 	private String optionServeur[], optionPort[];
@@ -61,6 +61,14 @@ public class FormulaireConnection extends LinearLayout {
 				form.get(1).getData().equals("") ? optionServeur[0] : form.get(1).getData(), 
 				form.get(2).getData().equals("") ? optionPort[0] : form.get(2).getData(),
 				option[Integer.parseInt(form.get(3).getData())]);
+	}
+
+	@Override
+	public ArrayList<Object> getDataGame() {
+		ArrayList<Object> ar = new ArrayList<Object>();
+		ar.add("Formulaire");
+		ar.add(getData());
+		return ar;
 	}
 	
 	public void desactiverFormulaire()

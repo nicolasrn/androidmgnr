@@ -22,14 +22,29 @@ public class MorpionAndroidActivity extends Activity implements Observer
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		Log.v(tag, "savedInstanceState : " + (savedInstanceState == null));
 		super.onCreate(savedInstanceState);
-		view = new ScrollView(this);
-		form = new FormulaireConnection(this);
 		
-		view.addView(form);
+		if (savedInstanceState == null)
+		{
+			view = new ScrollView(this);
+			form = new FormulaireConnection(this);
+			
+			view.addView(form);
+		}
+		else
+		{
+			Log.v(tag, "onCreate avant view : " + (view == null));
+			Log.v(tag, "onCreate apres view : " + (view == null));
+		}
 		setContentView(view);
 	}
 	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+	}
+
 	@Override
 	public void update(Observable observable, Object data) {
 		//connexion au serveur puis lancer l'interface du morpion
