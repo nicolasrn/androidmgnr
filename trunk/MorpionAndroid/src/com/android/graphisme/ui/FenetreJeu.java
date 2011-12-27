@@ -1,9 +1,11 @@
 package com.android.graphisme.ui;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+
 import com.android.graphisme.composant.BandeauPresentation;
 import com.android.graphisme.composant.Grille;
 import com.android.graphisme.composant.PionGraphique;
-import com.android.graphisme.composant.SupportGraphique;
 import com.android.graphisme.composant.Util;
 import com.android.graphisme.implementation.Reception;
 import com.android.graphisme.implementation.Transmission;
@@ -15,15 +17,17 @@ import com.android.reseau.interpretation.Interpreteur;
 import android.content.Context;
 import android.util.Log;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-public class FenetreJeu extends LinearLayout {
+public class FenetreJeu extends LinearLayout implements RecuperableData{
+	private static final long serialVersionUID = 1L;
 	private Grille grille;
 	private BandeauPresentation presentation;
 	
 	private Interpreteur interpret;
 	//private DataConnexion data;
 	private String info;
+	
+	private String []def;
 	
 	private int tailleGrille;
 	
@@ -43,7 +47,7 @@ public class FenetreJeu extends LinearLayout {
 		
 		//private String info = "joueur1;0;joueur2;1;tailleGrille";
 		//nom joueur courant; numero courant; nom joueur suivant; numero joueur suivant; taille de la grille
-		String def[] = info.split(";");
+		def = info.split(";");
 		
 		courant = Integer.parseInt(def[1]);
 		tailleGrille = Integer.parseInt(def[4]);
@@ -75,6 +79,18 @@ public class FenetreJeu extends LinearLayout {
 
 	public Grille getGrille() {
 		return grille;
+	}
+
+	@Override
+	public ArrayList<Object> getDataGame() {
+		ArrayList<Object> ar = new ArrayList<Object>();
+		ar.add("FenetreJeu");
+		ar.add(info);
+		ar.add(interpret);
+		ar.add(courant);
+		ar.add(def);
+		ar.add(grille.getMatriceCase());
+		return ar;
 	}
 
 }
