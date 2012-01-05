@@ -12,7 +12,7 @@ public class Connexion_bdd
 
 	private static String url = "jdbc:mysql://localhost:3306/morpion";
 	private static String user = "root";
-	private static String passwd = "rrnn2602";
+	private static String passwd = "";
 /**
  * Enregistre une partie gagnée
  * @param c1
@@ -24,14 +24,16 @@ public class Connexion_bdd
 		{
 			Statement stat = getInstance().createStatement();
 			java.sql.Date sDate = new java.sql.Date(System.currentTimeMillis());
-
-			stat.executeUpdate("INSERT INTO historique(joueur_1, joueur_2, date, resultat) VALUES ('"
-							+ c1
-							+ "','"
-							+ c2
-							+ "','"
-							+ sDate.toString()
-							+ "','" + c1 + " a gagné')");
+			
+			String sql = "INSERT INTO historique(joueur_1, joueur_2, date, resultat) VALUES ('"
+					+ c1
+					+ "','"
+					+ c2
+					+ "','"
+					+ sDate.toString()
+					+ "','" + c1 + " a gagné')";
+			System.out.println("sql : "+sql);
+			stat.executeUpdate(sql);
 			stat.close();
 		} 
 		catch (SQLException e) 
@@ -113,6 +115,10 @@ public class Connexion_bdd
 				e.printStackTrace();
 			}
 			catch (SQLException e)
+			{
+				e.printStackTrace();
+			}
+			catch (Exception e)
 			{
 				e.printStackTrace();
 			}

@@ -8,6 +8,7 @@ import com.android.graphisme.ui.FormulaireConnection;
 import com.android.metier.DataConnexion;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ScrollView;
@@ -24,6 +25,7 @@ public class MorpionAndroidActivity extends Activity implements Observer
 	public void onCreate(Bundle savedInstanceState) {
 		Log.v(tag, "savedInstanceState : " + (savedInstanceState == null));
 		super.onCreate(savedInstanceState);
+		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE)
 		
 		if (savedInstanceState == null)
 		{

@@ -185,7 +185,7 @@ class GuiHandler extends Handler
 			builder.setMessage("Vous avez gagné !!!")
 			       .setCancelable(false).setPositiveButton("ok", new DialogInterface.OnClickListener() {
 			           public void onClick(DialogInterface dialog, int id) {
-			                dialog.cancel();
+			                System.exit(0);
 			           }
 			       });
 			alert = builder.create();
@@ -196,7 +196,7 @@ class GuiHandler extends Handler
 			builder.setMessage("Vous avez perdu ...")
 		       .setCancelable(false).setPositiveButton("ok", new DialogInterface.OnClickListener() {
 		           public void onClick(DialogInterface dialog, int id) {
-		                dialog.cancel();
+		        	   System.exit(0);
 		           }
 		       });
 			alert = builder.create();
@@ -207,7 +207,7 @@ class GuiHandler extends Handler
 			builder.setMessage("Pas de bol :p")
 			       .setCancelable(false).setPositiveButton("ok", new DialogInterface.OnClickListener() {
 			           public void onClick(DialogInterface dialog, int id) {
-			                dialog.cancel();
+			        	   System.exit(0);
 			           }
 			       });
 			alert = builder.create();
@@ -218,7 +218,7 @@ class GuiHandler extends Handler
 			builder.setMessage("Victoire par abandon")
 			       .setCancelable(false).setPositiveButton("ok", new DialogInterface.OnClickListener() {
 			           public void onClick(DialogInterface dialog, int id) {
-			                dialog.cancel();
+			        	   System.exit(0);
 			           }
 			       });
 			alert = builder.create();

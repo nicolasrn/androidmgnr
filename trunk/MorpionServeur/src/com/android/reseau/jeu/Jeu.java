@@ -104,7 +104,7 @@ public class Jeu extends Thread{
 			 */
 			
 			ctrltr.envoiResultat(nbcoup == g.getNb_case() * g.getNb_case());
-			//System.out.println(Connexion_bdd.Affiche_score());
+			System.out.println("score : \n" + Connexion_bdd.Affiche_score());
 		}
 		catch (IOException e) 
 		{
@@ -127,7 +127,7 @@ public class Jeu extends Thread{
 			catch(IOException ioe)
 			{
 				System.out.print("client1 deconnecté");
-				//Connexion_bdd.envoi_abandon(client1.getJoueur(), client2.getJoueur());
+				Connexion_bdd.envoi_abandon(client1.getJoueur(), client2.getJoueur());
 
 			}
 			
@@ -144,8 +144,7 @@ public class Jeu extends Thread{
 			catch(IOException ioe)
 			{
 				System.out.println("client2 deconnecté");
-				//Connexion_bdd.envoi_abandon(client2.getJoueur(), client1.getJoueur());
-			
+				Connexion_bdd.envoi_abandon(client2.getJoueur(), client1.getJoueur());
 			}
 		}
 	}
