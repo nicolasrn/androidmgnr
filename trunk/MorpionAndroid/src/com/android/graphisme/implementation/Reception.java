@@ -139,8 +139,16 @@ class GuiHandler extends Handler
 		@Override
 		public void onClick(DialogInterface dialog, int which) 
 		{
-			this.setChanged();
-			this.notifyObservers(data);
+			try 
+			{
+				f.getIterpret().close();
+				this.setChanged();
+				this.notifyObservers(data);
+			} 
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -163,28 +171,28 @@ class GuiHandler extends Handler
 			break;
 		case 2:
 			builder = new AlertDialog.Builder(f.getContext());
-			builder.setMessage("Vous avez gagné !!!\n" + msg.obj)
+			builder.setMessage("Vous avez gagné !!!")
 			       .setCancelable(false).setPositiveButton("ok", new onClickAlert(msg.obj));
 			alert = builder.create();
 			alert.show();
 			break;
 		case 3:
 			builder = new AlertDialog.Builder(f.getContext());
-			builder.setMessage("Vous avez perdu ...\n" + msg.obj)
+			builder.setMessage("Vous avez perdu ...")
 		       .setCancelable(false).setPositiveButton("ok", new onClickAlert(msg.obj));
 			alert = builder.create();
 			alert.show();
 			break;
 		case 4:
 			builder = new AlertDialog.Builder(f.getContext());
-			builder.setMessage("Match nul :p\n" + msg.obj)
+			builder.setMessage("Match nul :p")
 			       .setCancelable(false).setPositiveButton("ok", new onClickAlert(msg.obj));
 			alert = builder.create();
 			alert.show();
 			break;
 		case 5:
 			builder = new AlertDialog.Builder(f.getContext());
-			builder.setMessage("Victoire par abandon\n" + msg.obj)
+			builder.setMessage("Victoire par abandon")
 			       .setCancelable(false).setPositiveButton("ok", new onClickAlert(msg.obj));
 			alert = builder.create();
 			alert.show();

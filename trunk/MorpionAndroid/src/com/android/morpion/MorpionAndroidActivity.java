@@ -12,6 +12,8 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ScrollView;
 
 public class MorpionAndroidActivity extends Activity implements Observer
@@ -21,6 +23,8 @@ public class MorpionAndroidActivity extends Activity implements Observer
 	private FenetreJeu fen;
 	private FenetreHistorique hist;
 	private ScrollView view;
+	
+	private static final int MENU_QUITTER = 0;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -46,6 +50,25 @@ public class MorpionAndroidActivity extends Activity implements Observer
 		setContentView(view);
 	}
 	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(0, MENU_QUITTER, 0, "Quitter");
+		return true;
+	}
+	
+	
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId())
+		{
+		case MENU_QUITTER: 
+			System.exit(0);
+			return true;
+		}
+		return false;
+	}
+
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);

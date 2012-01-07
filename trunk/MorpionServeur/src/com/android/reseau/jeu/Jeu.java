@@ -75,11 +75,13 @@ public class Jeu extends Thread{
 						{
 							g.setCase(cord.x, cord.y, new Pion_Ennemi());
 						}
-						
+
+						nbcoup++;
 						if(c.controle(cord.x, cord.y))
 						{
 							gagné = true;
-							continue;
+							//continue;
+							break;
 						}
 						
 						/**
@@ -89,7 +91,6 @@ public class Jeu extends Thread{
 						ctrltr.envoiClientConcurant(cord);
 						ctrltr.tour_suivant();
 						
-						nbcoup++;
 					}
 					else
 					{
@@ -99,6 +100,7 @@ public class Jeu extends Thread{
 				} while(occupe);
 			}
 			
+			System.out.println(nbcoup + "==" + (g.getNb_case() * g.getNb_case()));
 			/**
 			 * envoi au client de qui a gagné ????
 			 */
