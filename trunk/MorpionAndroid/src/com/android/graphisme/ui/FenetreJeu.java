@@ -1,15 +1,12 @@
 package com.android.graphisme.ui;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-
 import com.android.graphisme.composant.BandeauPresentation;
 import com.android.graphisme.composant.Grille;
 import com.android.graphisme.composant.PionGraphique;
 import com.android.graphisme.composant.Util;
 import com.android.graphisme.implementation.Reception;
 import com.android.graphisme.implementation.Transmission;
-import com.android.graphisme.ui.cor.FacadeCor;
+import com.android.graphisme.ui.corPion.FacadeCor;
 import com.android.metier.DataConnexion;
 import com.android.morpion.MorpionAndroidActivity;
 import com.android.reseau.interpretation.Interpreteur;
@@ -18,8 +15,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.LinearLayout;
 
-public class FenetreJeu extends LinearLayout implements RecuperableData{
-	private static final long serialVersionUID = 1L;
+public class FenetreJeu extends LinearLayout {
 	private Grille grille;
 	private BandeauPresentation presentation;
 	
@@ -35,12 +31,17 @@ public class FenetreJeu extends LinearLayout implements RecuperableData{
 	
 	public static int courant;
 	
-	public FenetreJeu(Context context, DataConnexion data) {
+	public FenetreJeu(Context context) {
 		super(context);
-		//this.data = data;
+	}
+	
+	public void init(DataConnexion data)
+	{
+		this.removeAllViews();
+		
 		this.info = data.getInfo();
 		this.interpret = new Interpreteur(data.getClient());
-		tabPion = FacadeCor.getCor().resoudre(data.getClient().getType());
+		tabPion = FacadeCor.getCor().resoudre(data.getClient().getType(), this.getContext());
 		
 		for(PionGraphique p : tabPion)
 			Log.v(MorpionAndroidActivity.tag, "" + p.getClass());
@@ -51,17 +52,17 @@ public class FenetreJeu extends LinearLayout implements RecuperableData{
 		
 		courant = Integer.parseInt(def[1]);
 		tailleGrille = Integer.parseInt(def[4]);
-		Util.getInstance(context, tailleGrille);
+		Util.getInstance(this.getContext(), tailleGrille);
 		
 		/*
 		 * definition de la grille
 		 */
-		grille = new Grille(context, tailleGrille, tailleGrille);
+		grille = new Grille(this.getContext(), tailleGrille, tailleGrille);
 		
 		/*
 		 * definition de l'entete de la fenetre
 		 */
-		presentation = new BandeauPresentation(context, tabPion[courant], tabPion[(courant+1)%2], def);
+		presentation = new BandeauPresentation(this.getContext(), tabPion[courant], tabPion[(courant+1)%2], def);
 		
 		//remplacer par un dp observer
 		grille.addEcouteurReseau(new Transmission(this));
@@ -79,18 +80,6 @@ public class FenetreJeu extends LinearLayout implements RecuperableData{
 
 	public Grille getGrille() {
 		return grille;
-	}
-
-	@Override
-	public ArrayList<Object> getDataGame() {
-		ArrayList<Object> ar = new ArrayList<Object>();
-		ar.add("FenetreJeu");
-		ar.add(info);
-		ar.add(interpret);
-		ar.add(courant);
-		ar.add(def);
-		ar.add(grille.getMatriceCase());
-		return ar;
 	}
 
 }

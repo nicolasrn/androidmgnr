@@ -1,4 +1,6 @@
-package com.android.graphisme.ui.cor;
+package com.android.graphisme.ui.corPion;
+
+import android.content.Context;
 
 import com.android.graphisme.composant.PionGraphique;
 
@@ -21,17 +23,17 @@ public abstract class COR {
 		return suivant;
 	}
 	
-	public PionGraphique[] resoudre(String pb)
+	public PionGraphique[] resoudre(String pb, Context context)
 	{
-		PionGraphique []solution = this._resoudre(pb); // récupération solution locale
+		PionGraphique []solution = this._resoudre(pb, context); // récupération solution locale
 		
 		if (solution != null) //si solution locale
 			return solution;
 		else if (suivant != null) //pas de solution on regarde le suivant
-			return suivant.resoudre(pb);
+			return suivant.resoudre(pb, context);
 		return null;
 	}
 	
-	protected abstract PionGraphique[] _resoudre(String pb);
+	protected abstract PionGraphique[] _resoudre(String pb, Context context);
 	
 }

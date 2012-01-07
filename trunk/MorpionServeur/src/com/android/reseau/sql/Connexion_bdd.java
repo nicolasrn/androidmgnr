@@ -33,7 +33,7 @@ public class Connexion_bdd {
 					+ sDate.toString()
 					+ "','"
 					+ c1
-					+ " a gagné')";
+					+ " a gagne')";
 			System.out.println("sql : " + sql);
 			stat.executeUpdate(sql);
 			stat.close();
@@ -86,7 +86,7 @@ public class Connexion_bdd {
 					+ sDate.toString()
 					+ "','"
 					+ c1
-					+ " a abandonné, quel lâche')");
+					+ " a abandonne, quel lache')");
 
 			stat.close();
 		} catch (SQLException e) {
@@ -134,11 +134,11 @@ public class Connexion_bdd {
 			
 			while (result.next()) {
 				String j1, j2, score, date;
-				j1 = result.getString(1);
-				j2 = result.getString(2);
-				date = result.getString(3);
+				j1 = result.getString(2);
+				j2 = result.getString(3);
+				date = result.getString(1);
 				score = result.getString(4);
-
+				
 				res_retour += j1 + " contre " + j2 + " - le " + date
 						+ " - issue : " + score + ';';
 			}

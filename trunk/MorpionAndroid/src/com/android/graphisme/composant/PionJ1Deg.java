@@ -2,6 +2,7 @@ package com.android.graphisme.composant;
 
 import com.android.morpion.R;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -11,13 +12,20 @@ import android.graphics.Rect;
 
 public class PionJ1Deg extends PionGraphique {
 	
+	public PionJ1Deg(Context context) {
+		super(context);
+		//if (imageType1 == null)
+			imageType1 = BitmapFactory.decodeResource(this.context.getResources(), R.drawable.oqqmkefn);
+
+		//if (imageType1 == null)
+		//	imageType1 = BitmapFactory.decodeResource(this.context.getResources(), R.drawable.oqqmkefn);
+	}
+
 	@Override
 	public void trace(Canvas canvas, Resources resource) {
 		Paint p = new Paint();
 		p.setColor(Color.RED);
 		
-		if (imageType1 == null)
-			imageType1 = BitmapFactory.decodeResource(resource, R.drawable.oqqmkefn);
 		canvas.drawBitmap(imageType1, new Rect(0, 0, imageType1.getWidth(), imageType1.getHeight()), new Rect(0, 0, Util.getInstance().getLayoutParamsGrille().width, Util.getInstance().getLayoutParamsGrille().height), p);
 	}
 
@@ -26,8 +34,6 @@ public class PionJ1Deg extends PionGraphique {
 		Paint p = new Paint();
 		p.setColor(Color.RED);
 		
-		if (imageType1 == null)
-			imageType1 = BitmapFactory.decodeResource(resource, R.drawable.oqqmkefn);
 		canvas.drawBitmap(imageType1, new Rect(0, 0, imageType1.getWidth(), imageType1.getHeight()), new Rect(0, 0, Util.getInstance().getLayoutParamsBandeau().width, Util.getInstance().getLayoutParamsBandeau().height), p);
 	
 	}

@@ -3,6 +3,7 @@ package com.android.morpion;
 import java.util.Observable;
 import java.util.Observer;
 
+import com.android.graphisme.ui.FenetreHistorique;
 import com.android.graphisme.ui.FenetreJeu;
 import com.android.graphisme.ui.FormulaireConnection;
 import com.android.metier.DataConnexion;
@@ -18,6 +19,7 @@ public class MorpionAndroidActivity extends Activity implements Observer
 	public static final String tag = "MorpionAndroidActivity";
 	private FormulaireConnection form;
 	private FenetreJeu fen;
+	private FenetreHistorique hist;
 	private ScrollView view;
 	
 	/** Called when the activity is first created. */
@@ -33,6 +35,8 @@ public class MorpionAndroidActivity extends Activity implements Observer
 			form = new FormulaireConnection(this);
 			
 			view.addView(form);
+			fen = new FenetreJeu(this);
+			hist = new FenetreHistorique(this);
 		}
 		else
 		{
@@ -46,16 +50,32 @@ public class MorpionAndroidActivity extends Activity implements Observer
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 	}
-
+	
 	@Override
 	public void update(Observable observable, Object data) {
-		//connexion au serveur puis lancer l'interface du morpion
-		DataConnexion dataConnexion = (DataConnexion) data;
-		Log.v(tag, "dans l'update");
-		//la grille est construite par le serveur (parametres sont juste transmis)
-		fen = new FenetreJeu(this, dataConnexion);
-		view.removeAllViews();
-		view.addView(fen);
-		setContentView(view);
+		if (data instanceof DataConnexion)
+		{
+			//connexion au serveur puis lancer l'interface du morpion
+			DataConnexion dataConnexion = (DataConnexion) data;
+			Log.v(tag, "dans l'update");
+			//la grille est construite par le serveur (parametres sont juste transmis)
+			fen.init(dataConnexion);
+			view.removeAllViews();
+			view.addView(fen);
+			setContentView(view);
+		}
+		else if (data instanceof String)
+		{
+			String str = (String)data;
+			hist.init(str);
+			view.removeAllViews();
+			view.addView(hist);
+		}
+		else
+		{
+			view.removeAllViews();
+			form.reset();
+			view.addView(form);
+		}
 	}
 }
