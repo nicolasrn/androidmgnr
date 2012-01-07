@@ -102,7 +102,6 @@ public class Jeu extends Thread{
 			/**
 			 * envoi au client de qui a gagné ????
 			 */
-			
 			ctrltr.envoiResultat(nbcoup == g.getNb_case() * g.getNb_case());
 			System.out.println("score : \n" + Connexion_bdd.Affiche_score());
 		}

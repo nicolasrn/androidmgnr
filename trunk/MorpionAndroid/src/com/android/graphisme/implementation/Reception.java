@@ -46,101 +46,58 @@ public class Reception extends Thread
 			Coordonnee c = null;
 			
 			Log.v(MorpionAndroidActivity.tag, "ordre : " + ordre);
-			if (ordre.equals("joue"))
+			if (ordre != null)
 			{
-				//f.getGrille().activerGrille();
-                Message msg = handler.obtainMessage();
-                msg.arg1 = 1;
-                handler.sendMessage(msg);
-			}
-			else if (ordre.equals("win"))
-			{
-				/*AlertDialog.Builder builder = new AlertDialog.Builder(f.getContext());
-				builder.setMessage("Vous avez gagnŽ !!!")
-				       .setCancelable(false).setPositiveButton("ok", new DialogInterface.OnClickListener() {
-				           public void onClick(DialogInterface dialog, int id) {
-				                dialog.cancel();
-				           }
-				       });
-				AlertDialog alert = builder.create();
-				alert.show();*/
-				Message msg = handler.obtainMessage();
-                msg.arg1 = 2;
-                handler.sendMessage(msg);
-				//JOptionPane.showMessageDialog(f, "Vous avez gagné", "Resutat", JOptionPane.INFORMATION_MESSAGE);
-				//JOptionPane.showMessageDialog(f, f.getIterpret().reception_historique(), "Historique", JOptionPane.INFORMATION_MESSAGE);
-				//System.exit(0);
-			}
-			else if (ordre.equals("lose"))
-			{
-				/*AlertDialog.Builder builder = new AlertDialog.Builder(f.getContext());
-				builder.setMessage("Vous avez perdu ...")
-			       .setCancelable(false).setPositiveButton("ok", new DialogInterface.OnClickListener() {
-			           public void onClick(DialogInterface dialog, int id) {
-			                dialog.cancel();
-			           }
-			       });
-				AlertDialog alert = builder.create();
-				alert.show();*/
-				Message msg = handler.obtainMessage();
-                msg.arg1 = 3;
-                handler.sendMessage(msg);
-				//JOptionPane.showMessageDialog(f, "Vous avez perdu", "Resutat", JOptionPane.INFORMATION_MESSAGE);
-				//JOptionPane.showMessageDialog(f, f.getIterpret().reception_historique(), "Historique", JOptionPane.INFORMATION_MESSAGE);
-				//System.exit(0);
-			}
-			else if (ordre.equals("matchnull"))
-			{
-				/*AlertDialog.Builder builder = new AlertDialog.Builder(f.getContext());
-				builder.setMessage("Pas de bol :p")
-				       .setCancelable(false).setPositiveButton("ok", new DialogInterface.OnClickListener() {
-				           public void onClick(DialogInterface dialog, int id) {
-				                dialog.cancel();
-				           }
-				       });
-				AlertDialog alert = builder.create();
-				alert.show();*/
-				Message msg = handler.obtainMessage();
-                msg.arg1 = 4;
-                handler.sendMessage(msg);
-				//JOptionPane.showMessageDialog(f, "Feliciation Match Null", "Resutat", JOptionPane.INFORMATION_MESSAGE);
-				//accusé de reception pour dire que le joueur ci est le gagnant
-				//JOptionPane.showMessageDialog(f, f.getIterpret().reception_historique(), "Historique", JOptionPane.INFORMATION_MESSAGE);
-				//System.exit(0);
-			}
-			else if (ordre.equals("decodeco"))
-			{
-				/*AlertDialog.Builder builder = new AlertDialog.Builder(f.getContext());
-				builder.setMessage("Victoire par abandon")
-				       .setCancelable(false).setPositiveButton("ok", new DialogInterface.OnClickListener() {
-				           public void onClick(DialogInterface dialog, int id) {
-				                dialog.cancel();
-				           }
-				       });
-				AlertDialog alert = builder.create();
-				alert.show();*/
-				Message msg = handler.obtainMessage();
-                msg.arg1 = 5;
-                handler.sendMessage(msg);
-				//JOptionPane.showMessageDialog(f, "l'autre joueur est deconnecté", "Resutat", JOptionPane.INFORMATION_MESSAGE);
-				//JOptionPane.showMessageDialog(f, f.getIterpret().reception_historique(), "Historique", JOptionPane.INFORMATION_MESSAGE);
-				//accusé de reception pour dire que le joueur ci est le gagnant
-				f.getIterpret().envoi_serveur("deco");
+				if (ordre.equals("joue"))
+				{
+	                Message msg = handler.obtainMessage();
+	                msg.arg1 = 1;
+	                handler.sendMessage(msg);
+				}
+				else if (ordre.equals("win"))
+				{
+					Message msg = handler.obtainMessage();
+	                msg.arg1 = 2;
+	                msg.obj = f.getIterpret().reception_historique();
+	                handler.sendMessage(msg);
+				}
+				else if (ordre.equals("lose"))
+				{
+					Message msg = handler.obtainMessage();
+	                msg.arg1 = 3;
+	                msg.obj = f.getIterpret().reception_historique();
+	                handler.sendMessage(msg);
+				}
+				else if (ordre.equals("matchnull"))
+				{
+					Message msg = handler.obtainMessage();
+	                msg.arg1 = 4;
+	                msg.obj = f.getIterpret().reception_historique();
+	                handler.sendMessage(msg);
+				}
+				else if (ordre.equals("decodeco"))
+				{
+					Message msg = handler.obtainMessage();
+	                msg.arg1 = 5;
+	                msg.obj = f.getIterpret().reception_historique();
+	                handler.sendMessage(msg);
+					//accusé de reception pour dire que le joueur ci est le gagnant
+					f.getIterpret().envoi_serveur("deco");
+					System.exit(0);
+				}
+				else
+				{
+					Log.v(MorpionAndroidActivity.tag, "ordre dans coordonnŽe : " + ordre);
+					c = new Coordonnee(ordre);
+				}
 				
-				//System.exit(0);
-			}
-			else
-				c = new Coordonnee(ordre);
-			
-			if (c != null)
-			{
-                Message msg = handler.obtainMessage();
-                msg.arg1 = 6;
-                msg.obj = c;
-                handler.sendMessage(msg);
-				//f.getGrille().getObjetTableauAt(c.x, c.y).activerImage(MImage.img1);
-				//f.getGrille().getObjetTableauAt(c.x, c.y).activerImage(FenetreJeu.tabPion[(FenetreJeu.courant+1)%2]);
-				//f.getGrille().activerGrille();
+				if (c != null)
+				{
+	                Message msg = handler.obtainMessage();
+	                msg.arg1 = 6;
+	                msg.obj = c;
+	                handler.sendMessage(msg);
+				}
 			}
 		}while(true);
 	} 
@@ -163,6 +120,15 @@ class GuiHandler extends Handler
 {
 	private FenetreJeu f;
 	
+	private class onClickAlert implements DialogInterface.OnClickListener
+	{
+		@Override
+		public void onClick(DialogInterface dialog, int which) 
+		{
+			System.exit(0);
+		}
+	}
+	
 	public GuiHandler(FenetreJeu f)
 	{
 		this.f = f;
@@ -182,45 +148,29 @@ class GuiHandler extends Handler
 			break;
 		case 2:
 			builder = new AlertDialog.Builder(f.getContext());
-			builder.setMessage("Vous avez gagnŽ !!!")
-			       .setCancelable(false).setPositiveButton("ok", new DialogInterface.OnClickListener() {
-			           public void onClick(DialogInterface dialog, int id) {
-			                System.exit(0);
-			           }
-			       });
+			builder.setMessage("Vous avez gagnŽ !!!\n" + msg.obj)
+			       .setCancelable(false).setPositiveButton("ok", new onClickAlert());
 			alert = builder.create();
 			alert.show();
 			break;
 		case 3:
 			builder = new AlertDialog.Builder(f.getContext());
-			builder.setMessage("Vous avez perdu ...")
-		       .setCancelable(false).setPositiveButton("ok", new DialogInterface.OnClickListener() {
-		           public void onClick(DialogInterface dialog, int id) {
-		        	   System.exit(0);
-		           }
-		       });
+			builder.setMessage("Vous avez perdu ...\n" + msg.obj)
+		       .setCancelable(false).setPositiveButton("ok", new onClickAlert());
 			alert = builder.create();
 			alert.show();
 			break;
 		case 4:
 			builder = new AlertDialog.Builder(f.getContext());
-			builder.setMessage("Pas de bol :p")
-			       .setCancelable(false).setPositiveButton("ok", new DialogInterface.OnClickListener() {
-			           public void onClick(DialogInterface dialog, int id) {
-			        	   System.exit(0);
-			           }
-			       });
+			builder.setMessage("Match nul :p\n" + msg.obj)
+			       .setCancelable(false).setPositiveButton("ok", new onClickAlert());
 			alert = builder.create();
 			alert.show();
 			break;
 		case 5:
 			builder = new AlertDialog.Builder(f.getContext());
-			builder.setMessage("Victoire par abandon")
-			       .setCancelable(false).setPositiveButton("ok", new DialogInterface.OnClickListener() {
-			           public void onClick(DialogInterface dialog, int id) {
-			        	   System.exit(0);
-			           }
-			       });
+			builder.setMessage("Victoire par abandon\n" + msg.obj)
+			       .setCancelable(false).setPositiveButton("ok", new onClickAlert());
 			alert = builder.create();
 			alert.show();
 			break;
