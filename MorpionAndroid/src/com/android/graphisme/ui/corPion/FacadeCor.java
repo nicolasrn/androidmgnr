@@ -1,4 +1,4 @@
-package com.android.graphisme.ui.cor;
+package com.android.graphisme.ui.corPion;
 
 public class FacadeCor {
 	private static COR cor;

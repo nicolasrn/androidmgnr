@@ -13,6 +13,7 @@ import com.android.reseau.client.Client;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,7 +25,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class FormulaireConnection extends LinearLayout implements RecuperableData {
+public class FormulaireConnection extends LinearLayout {
 	private Formulaire form;
 	private Button boutonValider;
 	private String optionServeur[], optionPort[];
@@ -37,7 +38,7 @@ public class FormulaireConnection extends LinearLayout implements RecuperableDat
 		
 		form.addLigne(new LigneFormulaire(context, "Saisir le pseudo"));
 		optionServeur = new String[] {"192.168.1.43"};
-		form.addLigne(new LigneFormulaire(context, "Saisir ip serveur", optionServeur));
+		form.addLigne(new LigneFormulaire(context, "Saisir ip serveur", optionServeur, InputType.TYPE_CLASS_PHONE));
 		optionPort = new String[] {"8000"};
 		form.addLigne(new LigneFormulaire(context, "Saisir le port", optionPort));
 		
@@ -63,14 +64,6 @@ public class FormulaireConnection extends LinearLayout implements RecuperableDat
 				option[Integer.parseInt(form.get(3).getData())]);
 	}
 
-	@Override
-	public ArrayList<Object> getDataGame() {
-		ArrayList<Object> ar = new ArrayList<Object>();
-		ar.add("Formulaire");
-		ar.add(getData());
-		return ar;
-	}
-	
 	public void desactiverFormulaire()
 	{
 		desactiverFormulaire("Attente du deuxime joueur");
@@ -95,6 +88,10 @@ public class FormulaireConnection extends LinearLayout implements RecuperableDat
 		boutonValider.setOnClickListener(new ActionFormulaire(this));
 		if (!message.equals(""))
 			boutonValider.setText(message);
+	}
+
+	public void reset() {
+		activerFormulaire();
 	}
 }
 
@@ -164,7 +161,7 @@ class LigneFormulaire extends LinearLayout
 		if (option != null && option.length > 1)
 		{
 			RadioGroup rg = new RadioGroup(context);
-			rg.setOrientation(RadioGroup.HORIZONTAL);
+			rg.setOrientation(RadioGroup.VERTICAL);
 			
 			for(String s : option)
 			{
@@ -193,6 +190,61 @@ class LigneFormulaire extends LinearLayout
 		{
 			this.champ = new EditText(context);
 			
+			if (option != null)
+				((EditText)champ).setHint(option[0]);
+			getDataChamp = new GetDataChamp(this) {
+				@Override
+				public String getData() {
+					return ((EditText)champ).getText().toString();
+				}
+			};
+		}
+		
+		addView(this.label);
+		addView(this.champ, new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+	}
+	
+	public LigneFormulaire(Context context, String label, String option[], int type) {
+		super(context);
+		this.setOrientation(LinearLayout.HORIZONTAL);
+		
+		this.label = new TextView(context);
+		this.label.setText(label);
+		this.label.setWidth(150);
+		
+		if (option != null && option.length > 1)
+		{
+			RadioGroup rg = new RadioGroup(context);
+			rg.setOrientation(RadioGroup.VERTICAL);
+			
+			for(String s : option)
+			{
+				RadioButton r = new RadioButton(context);
+				r.setText(s);
+				r.setInputType(type);
+				rg.addView(r);
+			}
+			((RadioButton)rg.getChildAt(0)).setChecked(true);
+			
+			this.champ = rg;
+			getDataChamp = new GetDataChamp(this) {
+				@Override
+				public String getData() {
+					RadioGroup rg = (RadioGroup)champ;
+					for(int i = 0; i < rg.getChildCount(); i++)
+					{
+						RadioButton r = (RadioButton)rg.getChildAt(i);
+						if (r.isChecked())
+							return i + "";
+					}
+					return "" + -1;
+				}
+			};
+		}
+		else
+		{
+			this.champ = new EditText(context);
+			((EditText)champ).setInputType(type);
 			if (option != null)
 				((EditText)champ).setHint(option[0]);
 			getDataChamp = new GetDataChamp(this) {

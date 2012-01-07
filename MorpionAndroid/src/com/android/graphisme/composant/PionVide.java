@@ -7,6 +7,10 @@ import android.graphics.Paint;
 
 public class PionVide extends PionGraphique {
 
+	public PionVide() {
+		super(null);
+	}
+
 	@Override
 	public void trace(Canvas canvas, Resources resource) {
 		Paint p = new Paint();
