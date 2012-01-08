@@ -131,14 +131,5 @@ public class Controleur_tour {
 			out.flush();
 			System.out.println("fin envoie du match null 2");
 		}
-		System.out.println("envoie score perdant");
-		out.println(Connexion_bdd.Affiche_score());
-		out.flush();
-		System.out.println("fin envoie score perdant");
-		
-		System.out.println("envoie score gagnant");
-		outg.println(Connexion_bdd.Affiche_score());
-		outg.flush();
-		System.out.println("fin envoie score gagnant");
 	}
 }

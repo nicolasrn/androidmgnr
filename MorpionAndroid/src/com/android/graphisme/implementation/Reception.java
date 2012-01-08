@@ -47,90 +47,79 @@ public class Reception extends Thread
 	{
 		while(continuer)
 		{
-			try
+			String ordre = f.getIterpret().reception_serveur();
+			Coordonnee c = null;
+			
+			Log.v(MorpionAndroidActivity.tag, "ordre : " + ordre);
+			if (ordre == null)
+				Log.e(MorpionAndroidActivity.tag, "erreur ordre est null");
+			
+			if (ordre.equals("joue"))
 			{
-				String ordre = f.getIterpret().reception_serveur();
-				Coordonnee c = null;
-				
-				Log.v(MorpionAndroidActivity.tag, "ordre : " + ordre);
-				if (ordre == null)
-					Log.e(MorpionAndroidActivity.tag, "erreur ordre est null");
-				
-				if (ordre.equals("joue"))
-				{
-					Log.v(MorpionAndroidActivity.tag, "dans joue");
-				    Message msg = handler.obtainMessage();
-				    msg.what = 1;
-				    handler.sendMessage(msg);
-				}
-				else if (ordre.equals("win"))
-				{
-				    continuer = false;
-					Log.v(MorpionAndroidActivity.tag, "dans win");
-					Message msg = handler.obtainMessage();
-				    msg.what = 2;
-				    //msg.obj = f.getIterpret().reception_historique();
-				    handler.sendMessage(msg);
-				}
-				else if (ordre.equals("lose"))
-				{
-				    continuer = false;
-					Log.v(MorpionAndroidActivity.tag, "dans lose");
-					Message msg = handler.obtainMessage();
-				    msg.what = 3;
-				    //msg.obj = f.getIterpret().reception_historique();
-				    handler.sendMessage(msg);
-				}
-				else if (ordre.equals("matchnull"))
-				{
-				    continuer = false;
-					Log.v(MorpionAndroidActivity.tag, "dans matchnull");
-					Message msg = handler.obtainMessage();
-				    msg.what = 4;
-				    //msg.obj = f.getIterpret().reception_historique();
-				    handler.sendMessage(msg);
-				}
-				else if (ordre.equals("decodeco"))
-				{
-				    continuer = false;
-					Log.v(MorpionAndroidActivity.tag, "dans decodeco");
-					//accusé de reception pour dire que le joueur ci est le gagnant
-					f.getIterpret().envoi_serveur("deco");
-					Message msg = handler.obtainMessage();
-				    msg.what = 5;
-				    //msg.obj = f.getIterpret().reception_historique();
-				    handler.sendMessage(msg);
-				}
-				else
-				{
-					Log.v(MorpionAndroidActivity.tag, "reception coordonnŽe : " + ordre);
-					c = new Coordonnee(ordre);
-					
-					Message msg = handler.obtainMessage();
-				    msg.what = 6;
-				    msg.obj = c;
-				    handler.sendMessage(msg);
-				}
+				Log.v(MorpionAndroidActivity.tag, "dans joue");
+			    Message msg = handler.obtainMessage();
+			    msg.what = 1;
+			    handler.sendMessage(msg);
 			}
-			catch (Exception e) 
+			else if (ordre.equals("win"))
 			{
-				e.printStackTrace();
+			    continuer = false;
+				Log.v(MorpionAndroidActivity.tag, "dans win");
+				Message msg = handler.obtainMessage();
+			    msg.what = 2;
+			    //msg.obj = f.getIterpret().reception_historique();
+			    handler.sendMessage(msg);
+			}
+			else if (ordre.equals("lose"))
+			{
+			    continuer = false;
+				Log.v(MorpionAndroidActivity.tag, "dans lose");
+				Message msg = handler.obtainMessage();
+			    msg.what = 3;
+			    //msg.obj = f.getIterpret().reception_historique();
+			    handler.sendMessage(msg);
+			}
+			else if (ordre.equals("matchnull"))
+			{
+			    continuer = false;
+				Log.v(MorpionAndroidActivity.tag, "dans matchnull");
+				Message msg = handler.obtainMessage();
+			    msg.what = 4;
+			    //msg.obj = f.getIterpret().reception_historique();
+			    handler.sendMessage(msg);
+			}
+			else if (ordre.equals("decodeco"))
+			{
+			    continuer = false;
+				Log.v(MorpionAndroidActivity.tag, "dans decodeco");
+				//accusé de reception pour dire que le joueur ci est le gagnant
+				f.getIterpret().envoi_serveur("deco");
+				Message msg = handler.obtainMessage();
+			    msg.what = 5;
+			    //msg.obj = f.getIterpret().reception_historique();
+			    handler.sendMessage(msg);
+			}
+			else
+			{
+				Log.v(MorpionAndroidActivity.tag, "reception coordonnŽe : " + ordre);
+				c = new Coordonnee(ordre);
+				
+				Message msg = handler.obtainMessage();
+			    msg.what = 6;
+			    msg.obj = c;
+			    handler.sendMessage(msg);
 			}
 		}
+	
 		Log.v(MorpionAndroidActivity.tag, "fin du jeu dans l'attente de l'historique");
-		try
-		{
-			String histo = f.getIterpret().reception_historique();
-			Message msg = handler.obtainMessage();
-			msg.what = 7;
-			msg.obj = histo;
-			handler.sendMessageDelayed(msg, 1000);
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-	} 
+		Log.v(MorpionAndroidActivity.tag, "dans l'attente de l'historique");
+		String histo = f.getIterpret().reception_historique();
+		Log.v(MorpionAndroidActivity.tag, "recut");
+		Message msg = handler.obtainMessage();
+		msg.what = 7;
+		msg.obj = histo;
+		handler.sendMessage(msg);
+	}
 	
 	@Override
 	public void run()
@@ -239,13 +228,12 @@ class GuiHandler extends Handler
 				Log.v(MorpionAndroidActivity.tag, "activation de l'image");
 				Coordonnee c = (Coordonnee)msg.obj;
 				f.getGrille().getObjetTableauAt(c.x, c.y).activerImage(FenetreJeu.tabPion[(FenetreJeu.courant+1)%2]);
-				f.getGrille().activerGrille();
+				//f.getGrille().activerGrille();
 				break;
 			case 7:
-				Log.v(MorpionAndroidActivity.tag, "dans envoyer historique");
+				Log.v(MorpionAndroidActivity.tag, "traitement de l'historique");
 				EnvoyerHistorique eh = new EnvoyerHistorique(f);
 				eh.notifyObserv(msg.obj);
-				//f.getIterpret().close();
 				break;
 			}
 		}

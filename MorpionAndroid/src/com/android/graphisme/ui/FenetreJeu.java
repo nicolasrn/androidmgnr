@@ -12,6 +12,7 @@ import com.android.morpion.MorpionAndroidActivity;
 import com.android.reseau.interpretation.Interpreteur;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.LinearLayout;
 
@@ -73,6 +74,7 @@ public class FenetreJeu extends LinearLayout {
 		grille.addEcouteurReseau(new Transmission(this));
 		Reception r = new Reception(this);
 		r.start();
+		//handler.post(new RunnableReception(this));
 		
 		this.setOrientation(LinearLayout.VERTICAL);
 		this.addView(presentation);

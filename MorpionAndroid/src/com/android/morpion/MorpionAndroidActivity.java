@@ -1,5 +1,7 @@
 package com.android.morpion;
 
+import java.io.DataInputStream;
+import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -7,10 +9,13 @@ import com.android.graphisme.ui.FenetreHistorique;
 import com.android.graphisme.ui.FenetreJeu;
 import com.android.graphisme.ui.FormulaireConnection;
 import com.android.metier.DataConnexion;
+import com.android.reseau.client.Client;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,7 +43,7 @@ public class MorpionAndroidActivity extends Activity implements Observer
 			view = new ScrollView(this);
 			form = new FormulaireConnection(this);
 			view.addView(form);
-			//fen = new FenetreJeu(this);
+			fen = new FenetreJeu(this);
 			hist = new FenetreHistorique(this);
 		}
 		else
@@ -64,11 +69,6 @@ public class MorpionAndroidActivity extends Activity implements Observer
 			return true;
 		}
 		return false;
-	}
-
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
 	}
 	
 	@Override

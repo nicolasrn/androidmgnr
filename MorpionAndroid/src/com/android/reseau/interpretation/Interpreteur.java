@@ -5,7 +5,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
+import android.util.Log;
+
 import com.android.metier.Coordonnee;
+import com.android.morpion.MorpionAndroidActivity;
 import com.android.reseau.client.Client;
 
 /**
@@ -29,6 +32,7 @@ public class Interpreteur {
 	 * @throws IOException
 	 */
 	public void envoi_serveur(Coordonnee coord) throws IOException {
+		Log.v(MorpionAndroidActivity.tag, "envoi de coordonnée au serveur");
 		PrintWriter out = new PrintWriter(client.GetSocket().getOutputStream());
 		out.println(coord.toString());
 		out.flush();

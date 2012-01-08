@@ -1,7 +1,11 @@
 package com.android.reseau.serveur;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+
 import com.android.reseau.jeu.Jeu;
 import com.android.reseau.serveur.element.Grille_serveur;
+import com.android.reseau.sql.Connexion_bdd;
 
 /**
  * 
@@ -39,8 +43,28 @@ public class DialogueClient extends Thread
 		{
 			j.start();
 			j.join();
-		} 
+			
+			System.out.println("le jeu est terminer maintenant 'historique !!");
+			Thread.sleep(1000);
+			
+			PrintWriter out = new PrintWriter(client1.getSocket().getOutputStream()), 
+						outg = new PrintWriter(client2.getSocket().getOutputStream());
+			
+			System.out.println("envoie score perdant");
+			out.println(Connexion_bdd.Affiche_score());
+			out.flush();
+			System.out.println("fin envoie score perdant");
+			
+			System.out.println("envoie score gagnant");
+			outg.println(Connexion_bdd.Affiche_score());
+			outg.flush();
+			System.out.println("fin envoie score gagnant");
+		}
 		catch (InterruptedException e) 
+		{
+			e.printStackTrace();
+		}
+		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
