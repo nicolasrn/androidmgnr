@@ -36,6 +36,7 @@ public class Client {
 		this.port = Integer.parseInt(port);
 
 		this.connectiona = new Socket(InetAddress.getByName(host), this.port);
+		this.connectiona.setSoTimeout(0);
 	}
 
 	/**

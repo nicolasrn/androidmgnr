@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
+import android.text.AndroidCharacter;
 import android.util.Log;
 
 import com.android.graphisme.ui.FenetreJeu;
@@ -29,8 +30,8 @@ public class Reception extends Thread
 	public Reception(FenetreJeu jeu) 
 	{
 		this.f = jeu;
-		this.continuer = true;
 		this.handler = new GuiHandler(f);
+		this.continuer = true;
 	}
 	
 	/**
@@ -40,72 +41,95 @@ public class Reception extends Thread
 	 * lose : pour dire que ce joueur a perdu
 	 * matchnul : pour dire ex equao
 	 * decodeco : pour signaler l'abandon de l'autre joueur
+	 * @throws IOException 
 	 */
 	public void ReceptionMessage() throws IOException 
 	{
-		do
+		while(continuer)
 		{
-			String ordre = f.getIterpret().reception_serveur();
-			Coordonnee c = null;
-			
-			Log.v(MorpionAndroidActivity.tag, "ordre : " + ordre);
-		
-			if (ordre.equals("joue"))
+			try
 			{
-                Message msg = handler.obtainMessage();
-                msg.arg1 = 1;
-                handler.sendMessage(msg);
+				String ordre = f.getIterpret().reception_serveur();
+				Coordonnee c = null;
+				
+				Log.v(MorpionAndroidActivity.tag, "ordre : " + ordre);
+				if (ordre == null)
+					Log.e(MorpionAndroidActivity.tag, "erreur ordre est null");
+				
+				if (ordre.equals("joue"))
+				{
+					Log.v(MorpionAndroidActivity.tag, "dans joue");
+				    Message msg = handler.obtainMessage();
+				    msg.what = 1;
+				    handler.sendMessage(msg);
+				}
+				else if (ordre.equals("win"))
+				{
+				    continuer = false;
+					Log.v(MorpionAndroidActivity.tag, "dans win");
+					Message msg = handler.obtainMessage();
+				    msg.what = 2;
+				    //msg.obj = f.getIterpret().reception_historique();
+				    handler.sendMessage(msg);
+				}
+				else if (ordre.equals("lose"))
+				{
+				    continuer = false;
+					Log.v(MorpionAndroidActivity.tag, "dans lose");
+					Message msg = handler.obtainMessage();
+				    msg.what = 3;
+				    //msg.obj = f.getIterpret().reception_historique();
+				    handler.sendMessage(msg);
+				}
+				else if (ordre.equals("matchnull"))
+				{
+				    continuer = false;
+					Log.v(MorpionAndroidActivity.tag, "dans matchnull");
+					Message msg = handler.obtainMessage();
+				    msg.what = 4;
+				    //msg.obj = f.getIterpret().reception_historique();
+				    handler.sendMessage(msg);
+				}
+				else if (ordre.equals("decodeco"))
+				{
+				    continuer = false;
+					Log.v(MorpionAndroidActivity.tag, "dans decodeco");
+					//accusÈ de reception pour dire que le joueur ci est le gagnant
+					f.getIterpret().envoi_serveur("deco");
+					Message msg = handler.obtainMessage();
+				    msg.what = 5;
+				    //msg.obj = f.getIterpret().reception_historique();
+				    handler.sendMessage(msg);
+				}
+				else
+				{
+					Log.v(MorpionAndroidActivity.tag, "reception coordonnée : " + ordre);
+					c = new Coordonnee(ordre);
+					
+					Message msg = handler.obtainMessage();
+				    msg.what = 6;
+				    msg.obj = c;
+				    handler.sendMessage(msg);
+				}
 			}
-			else if (ordre.equals("win"))
+			catch (Exception e) 
 			{
-				Message msg = handler.obtainMessage();
-                msg.arg1 = 2;
-                msg.obj = f.getIterpret().reception_historique();
-                handler.sendMessage(msg);
-                this.continuer = false;
+				e.printStackTrace();
 			}
-			else if (ordre.equals("lose"))
-			{
-				Message msg = handler.obtainMessage();
-                msg.arg1 = 3;
-                msg.obj = f.getIterpret().reception_historique();
-                handler.sendMessage(msg);
-                this.continuer = false;
-			}
-			else if (ordre.equals("matchnull"))
-			{
-				Message msg = handler.obtainMessage();
-                msg.arg1 = 4;
-                msg.obj = f.getIterpret().reception_historique();
-                handler.sendMessage(msg);
-                this.continuer = false;
-			}
-			else if (ordre.equals("decodeco"))
-			{
-				Message msg = handler.obtainMessage();
-                msg.arg1 = 5;
-                msg.obj = f.getIterpret().reception_historique();
-                handler.sendMessage(msg);
-				//accusÈ de reception pour dire que le joueur ci est le gagnant
-				f.getIterpret().envoi_serveur("deco");
-				this.continuer = false;
-				System.exit(0);
-			}
-			else
-			{
-				Log.v(MorpionAndroidActivity.tag, "ordre dans coordonnée : " + ordre);
-				c = new Coordonnee(ordre);
-			}
-			
-			if (c != null)
-			{
-                Message msg = handler.obtainMessage();
-                msg.arg1 = 6;
-                msg.obj = c;
-                handler.sendMessage(msg);
-			}
-
-		}while(this.continuer);
+		}
+		Log.v(MorpionAndroidActivity.tag, "fin du jeu dans l'attente de l'historique");
+		try
+		{
+			String histo = f.getIterpret().reception_historique();
+			Message msg = handler.obtainMessage();
+			msg.what = 7;
+			msg.obj = histo;
+			handler.sendMessageDelayed(msg, 1000);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 	} 
 	
 	@Override
@@ -115,10 +139,38 @@ public class Reception extends Thread
 		{
 			ReceptionMessage();
 		} 
-		catch (IOException e)
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
+	}
+}
+
+class OnClickAlert implements DialogInterface.OnClickListener
+{
+	public OnClickAlert() throws Exception
+	{
+		
+	}
+	
+	@Override
+	public void onClick(DialogInterface dialog, int which) 
+	{
+		dialog.cancel();
+	}
+}
+
+class EnvoyerHistorique extends Observable
+{
+	public EnvoyerHistorique(FenetreJeu f)
+	{
+		this.addObserver((MorpionAndroidActivity)f.getContext());
+	}
+	
+	public void notifyObserv(Object data)
+	{
+		this.setChanged();
+		this.notifyObservers(data);
 	}
 }
 
@@ -126,82 +178,80 @@ class GuiHandler extends Handler
 {
 	private FenetreJeu f;
 	
-	private class onClickAlert extends Observable implements DialogInterface.OnClickListener
-	{
-		Object data;
-		
-		public onClickAlert(Object data)
-		{
-			this.data = data;
-			this.addObserver((MorpionAndroidActivity)f.getContext());
-		}
-		
-		@Override
-		public void onClick(DialogInterface dialog, int which) 
-		{
-			try 
-			{
-				f.getIterpret().close();
-				this.setChanged();
-				this.notifyObservers(data);
-			} 
-			catch (IOException e) 
-			{
-				e.printStackTrace();
-			}
-		}
-	}
-	
 	public GuiHandler(FenetreJeu f)
 	{
 		this.f = f;
 	}
 	
 	@Override
-	public void handleMessage(Message msg) {
-		Log.v(MorpionAndroidActivity.tag, "je suis la c'est déja pas si mal");
-		AlertDialog.Builder builder;
-		AlertDialog alert;
-		
-		switch(msg.arg1)
+	public void handleMessage(Message msg) 
+	{
+		try 
 		{
-		case 1:
-			Log.v(MorpionAndroidActivity.tag, "msg.what ok");
-			f.getGrille().activerGrille();
-			break;
-		case 2:
-			builder = new AlertDialog.Builder(f.getContext());
-			builder.setMessage("Vous avez gagné !!!")
-			       .setCancelable(false).setPositiveButton("ok", new onClickAlert(msg.obj));
-			alert = builder.create();
-			alert.show();
-			break;
-		case 3:
-			builder = new AlertDialog.Builder(f.getContext());
-			builder.setMessage("Vous avez perdu ...")
-		       .setCancelable(false).setPositiveButton("ok", new onClickAlert(msg.obj));
-			alert = builder.create();
-			alert.show();
-			break;
-		case 4:
-			builder = new AlertDialog.Builder(f.getContext());
-			builder.setMessage("Match nul :p")
-			       .setCancelable(false).setPositiveButton("ok", new onClickAlert(msg.obj));
-			alert = builder.create();
-			alert.show();
-			break;
-		case 5:
-			builder = new AlertDialog.Builder(f.getContext());
-			builder.setMessage("Victoire par abandon")
-			       .setCancelable(false).setPositiveButton("ok", new onClickAlert(msg.obj));
-			alert = builder.create();
-			alert.show();
-			break;
-		case 6:
-			Coordonnee c = (Coordonnee)msg.obj;
-			f.getGrille().getObjetTableauAt(c.x, c.y).activerImage(FenetreJeu.tabPion[(FenetreJeu.courant+1)%2]);
-			f.getGrille().activerGrille();
-			break;
+			Log.v(MorpionAndroidActivity.tag, "dans le handleMessage");
+			
+			switch(msg.what)
+			{
+			case 1:
+				Log.v(MorpionAndroidActivity.tag, "activation de la grille");
+				f.getGrille().activerGrille();
+				break;
+			case 2:
+				Log.v(MorpionAndroidActivity.tag, "message victoire");
+				new AlertDialog
+						.Builder(f.getContext())
+						.setMessage("Vous avez gagné !!!")
+						.setCancelable(false).setPositiveButton("ok", new OnClickAlert())
+						.create()
+						.show();
+				break;
+			case 3:
+				Log.v(MorpionAndroidActivity.tag, "message defaite");
+				new AlertDialog
+					.Builder(f.getContext())
+					.setMessage("Vous avez perdu ...")
+					.setCancelable(false)
+					.setPositiveButton("ok", new OnClickAlert())
+					.create()
+					.show();
+				break;
+			case 4:
+				Log.v(MorpionAndroidActivity.tag, "match null");
+				new AlertDialog
+					.Builder(f.getContext())
+					.setMessage("Match nul :p")
+					.setCancelable(false)
+					.setPositiveButton("ok", new OnClickAlert())
+					.create()
+					.show();
+				break;
+			case 5:
+				Log.v(MorpionAndroidActivity.tag, "message abandon");
+				new AlertDialog
+					.Builder(f.getContext())
+					.setMessage("Victoire par abandon")
+					.setCancelable(false)
+					.setPositiveButton("ok", new OnClickAlert())
+					.create()
+					.show();
+				break;
+			case 6:
+				Log.v(MorpionAndroidActivity.tag, "activation de l'image");
+				Coordonnee c = (Coordonnee)msg.obj;
+				f.getGrille().getObjetTableauAt(c.x, c.y).activerImage(FenetreJeu.tabPion[(FenetreJeu.courant+1)%2]);
+				f.getGrille().activerGrille();
+				break;
+			case 7:
+				Log.v(MorpionAndroidActivity.tag, "dans envoyer historique");
+				EnvoyerHistorique eh = new EnvoyerHistorique(f);
+				eh.notifyObserv(msg.obj);
+				//f.getIterpret().close();
+				break;
+			}
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
 		}
 	}
-};
+}

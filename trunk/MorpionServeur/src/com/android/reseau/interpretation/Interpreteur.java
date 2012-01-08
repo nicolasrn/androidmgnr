@@ -1,6 +1,7 @@
 package com.android.reseau.interpretation;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -29,9 +30,11 @@ public class Interpreteur {
 	 * @throws IOException
 	 */
 	public void envoi_serveur(Coordonnee coord) throws IOException {
-		PrintWriter out = new PrintWriter(client.GetSocket().getOutputStream());
+		/*PrintWriter out = new PrintWriter(client.GetSocket().getOutputStream());
 		out.println(coord.toString());
-		out.flush();
+		out.flush();*/
+		DataOutputStream out = new DataOutputStream(client.GetSocket().getOutputStream());
+		out.writeChars(coord.toString());
 	}
 
 	/**
@@ -41,7 +44,7 @@ public class Interpreteur {
 	 */
 	public String reception_serveur() throws IOException {
 		BufferedReader in = new BufferedReader(new InputStreamReader(client
-				.GetSocket().getInputStream()));
+				.GetSocket().getInputStream()), 8*1024);
 		return in.readLine();
 	}
 
@@ -51,7 +54,7 @@ public class Interpreteur {
 	 * @throws IOException
 	 */
 	public String reception_historique() throws IOException {
-		String chaine = reception_serveur().replace(";", "\n");
+		String chaine = reception_serveur();//.replace(";", "\n");
 		System.out.println(chaine);
 		return chaine;
 	}
@@ -63,9 +66,11 @@ public class Interpreteur {
 	 * @throws IOException
 	 */
 	public void envoi_serveur(String msg) throws IOException {
-		PrintWriter out = new PrintWriter(client.GetSocket().getOutputStream());
+		/*PrintWriter out = new PrintWriter(client.GetSocket().getOutputStream());
 		out.println(msg);
-		out.flush();
+		out.flush();*/
+		DataOutputStream out = new DataOutputStream(client.GetSocket().getOutputStream());
+		out.writeChars(msg);
 	}
 
 	/**

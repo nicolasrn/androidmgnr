@@ -41,7 +41,7 @@ public class Interpreteur {
 	 */
 	public String reception_serveur() throws IOException {
 		BufferedReader in = new BufferedReader(new InputStreamReader(client
-				.GetSocket().getInputStream()));
+				.GetSocket().getInputStream()), 8*1024);
 		return in.readLine();
 	}
 
@@ -51,7 +51,7 @@ public class Interpreteur {
 	 * @throws IOException
 	 */
 	public String reception_historique() throws IOException {
-		String chaine = reception_serveur().replace(";", "\n");
+		String chaine = reception_serveur();//.replace(";", "\n");
 		System.out.println(chaine);
 		return chaine;
 	}

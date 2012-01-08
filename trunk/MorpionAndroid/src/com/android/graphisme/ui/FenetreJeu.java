@@ -35,6 +35,11 @@ public class FenetreJeu extends LinearLayout {
 		super(context);
 	}
 	
+	public FenetreJeu(Context context, DataConnexion data) {
+		super(context);
+		init(data);
+	}
+	
 	public void init(DataConnexion data)
 	{
 		this.removeAllViews();
