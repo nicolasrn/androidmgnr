@@ -44,9 +44,9 @@ public class Controleur_tour {
 	 * Indique au joueur courant qu'il a la main en fonction du numéro du tour
 	 * @throws IOException
 	 */
-	public void ordre_jeu() throws IOException{
+	public void ordre_jeu() throws Exception{
 		PrintWriter out;
-		
+		Thread.sleep(1000);
 		System.out.println("envoie d'un ordre jeu");
 		out = new PrintWriter(tab_socket[tour].getSocket().getOutputStream(), false);
 		out.println("joue");
@@ -73,10 +73,11 @@ public class Controleur_tour {
 	 * @throws IOException
 	 * 
 	 */
-	public void envoiClientConcurant (Coordonnee c) throws IOException
+	public void envoiClientConcurant (Coordonnee c) throws Exception
 	{
 		System.out.println("envoie des coordonnŽes au client suivant");
 		PrintWriter out;
+		Thread.sleep(1000);
 		out = new PrintWriter(tab_socket[(tour+1) % 2].getSocket().getOutputStream(), false);
 		
 		out.println(c.toString());
@@ -93,11 +94,13 @@ public class Controleur_tour {
 	 * Envoi les message de fin de jeu ==> gagné au joueur qui doit gagné perdu à l'autre
 	 * @throws IOException  
 	 */
-	public void envoiResultat(boolean matchNull) throws IOException
+	public void envoiResultat(boolean matchNull) throws Exception
 	{
 		PrintWriter out,outg;
+		Thread.sleep(1000);
 		outg = new PrintWriter(tab_socket[(tour+1)%2].getSocket().getOutputStream(), false);
 		out = new PrintWriter(tab_socket[tour].getSocket().getOutputStream(), false);
+		Thread.sleep(1000);
 		
 		if (!matchNull)
 		{
