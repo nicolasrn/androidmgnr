@@ -2,11 +2,13 @@ package com.android.graphisme.implementation;
 
 import java.io.IOException;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.graphisme.composant.Case;
 import com.android.graphisme.composant.Grille;
 import com.android.graphisme.ui.FenetreJeu;
+import com.android.morpion.MorpionAndroidActivity;
 
 /**
  * classe qui assure la transmission serveur-client et vice et versa
@@ -37,6 +39,7 @@ public class Transmission
 			//System.out.println(Grille.coord);
 			f.getIterpret().envoi_serveur(Grille.coord);
 			
+			Log.v(MorpionAndroidActivity.tag, "desactivation de la grille");
 			f.getGrille().desactiverGrille();
 			//reception de l'action ordonnée par le serveur a effectuer par le client
 			caseGrille.activerImage(FenetreJeu.tabPion[FenetreJeu.courant]);

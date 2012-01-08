@@ -1,29 +1,21 @@
 package com.android.graphisme.ui;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Observable;
 
+import com.android.graphisme.ui.impl.formulaire.ActionFormulaire;
 import com.android.metier.DataConnexion;
 import com.android.morpion.MorpionAndroidActivity;
-import com.android.reseau.client.Client;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class FormulaireConnection extends LinearLayout {
 	private Formulaire form;
@@ -37,14 +29,14 @@ public class FormulaireConnection extends LinearLayout {
 		form = new Formulaire(context);
 		
 		form.addLigne(new LigneFormulaire(context, "Saisir le pseudo"));
-		optionServeur = new String[] {"192.168.1.43"};
+		optionServeur = new String[] {"192.168.2.65"};
 		form.addLigne(new LigneFormulaire(context, "Saisir ip serveur", optionServeur, InputType.TYPE_CLASS_PHONE));
 		optionPort = new String[] {"8000"};
 		form.addLigne(new LigneFormulaire(context, "Saisir le port", optionPort, InputType.TYPE_CLASS_NUMBER));
 		
 		option = new String[] {"Classique", "Crade"};
 		form.addLigne(new LigneFormulaire(context, "version", option));
-		addView(form);
+		this.addView(form);
 		boutonValider = new Button(context);
 		boutonValider.setText("Valider");
 		boutonValider.setOnClickListener(new ActionFormulaire(this));
@@ -279,149 +271,3 @@ class LigneFormulaire extends LinearLayout
 	}
 }
 
-class HandlerGuiConnexion extends Handler
-{
-	private ActionFormulaire actionFormulaire;
-	
-	public HandlerGuiConnexion(ActionFormulaire actionFormulaire) {
-		this.actionFormulaire = actionFormulaire;
-	}
-
-	@Override
-	public void handleMessage(Message msg) {
-		super.handleMessage(msg);
-		switch(msg.what)
-		{
-		case 1:
-			Log.v(MorpionAndroidActivity.tag, "handler desactivation formulaire");
-			actionFormulaire.getForm().desactiverFormulaire();
-			break;
-		case 2:
-			Log.v(MorpionAndroidActivity.tag, "handler notification observer");
-			DataConnexion data = (DataConnexion) msg.obj;
-			actionFormulaire.setChanged();
-			actionFormulaire.notifyObservers(data);
-			break;
-		case 3:
-			Log.v(MorpionAndroidActivity.tag, "handler cas activation formulaire");
-			actionFormulaire.getForm().activerFormulaire();
-			break;
-		}
-	}
-}
-
-class ThreadActionFormulaire extends Thread
-{
-	private DataConnexion data;
-	private ActionFormulaire actionFormulaire;
-	private HandlerGuiConnexion handler;
-	
-	public ThreadActionFormulaire(ActionFormulaire actionFormulaire, DataConnexion data)
-	{
-		Log.v(MorpionAndroidActivity.tag, "instanciation du thread");
-		this.actionFormulaire = actionFormulaire;
-		this.data = data;
-		this.handler = new HandlerGuiConnexion(this.actionFormulaire);
-	}
-	
-	@Override
-	public void run()
-	{
-		try
-		{
-			Log.v(MorpionAndroidActivity.tag, "Lancement du run du thread");
-			this.data.createClient();
-			Log.v(MorpionAndroidActivity.tag, "données récupérées : " + this.data);
-			Client client = this.data.getClient();
-			//actionFormulaire.getForm().desactiverFormulaire();
-			//comme on est dans un thread il faut déléguer la tache a un handler
-			Message msg = handler.obtainMessage(1);
-			handler.sendMessage(msg);
-			
-			/*envoie des donnÈes perso, chaque joueur, type de reprÈsentation*/
-			
-			PrintWriter infoc = new PrintWriter(client.getConnectiona().getOutputStream(), false);
-			infoc.println(data.getPseudo());
-			infoc.flush();
-			
-			String info = client.attente();
-			this.data.createInfo(info);
-			//ceci n'est pas possible car implique une action graphique donc on passe par le handler
-			//actionFormulaire.setChanged();
-			//actionFormulaire.notifyObservers(data);
-			//ceci est bon car la répercution graphique est gérer par un handler
-			msg = handler.obtainMessage(2);
-			msg.obj = this.data;
-			handler.sendMessage(msg);
-		} 
-		catch (NumberFormatException e)
-		{
-			Log.e(MorpionAndroidActivity.tag, "erreur NumberFormatException : " + e.getMessage() + " " + e.getCause());
-			//actionFormulaire.getForm().activerFormulaire();
-			//idem en cas d'erreur
-			Message msg = handler.obtainMessage(3);
-			handler.sendMessage(msg);
-		} 
-		catch (UnknownHostException e) 
-		{
-			Log.e(MorpionAndroidActivity.tag, "erreur UnknownHostException : " + e.getMessage() + " " + e.getCause());
-			//actionFormulaire.getForm().activerFormulaire();
-			//idem en cas d'erreur
-			Message msg = handler.obtainMessage(3);
-			handler.sendMessage(msg);
-		} 
-		catch (IOException e) 
-		{
-			Log.e(MorpionAndroidActivity.tag, "erreur IOException : " + e.getMessage() + " " + e.getCause());
-			//actionFormulaire.getForm().activerFormulaire();
-			//idem en cas d'erreur
-			Message msg = handler.obtainMessage(3);
-			handler.sendMessage(msg);
-		}
-	}
-}
-
-class ActionFormulaire extends Observable implements OnClickListener
-{
-	private FormulaireConnection form;
-	
-	public ActionFormulaire(FormulaireConnection formulaireConnection) {
-		this.form = formulaireConnection;
-		this.addObserver((MorpionAndroidActivity)form.getContext());
-	}
-
-	public FormulaireConnection getForm() {
-		return form;
-	}
-
-	@Override
-	public void onClick(View v) 
-	{
-		Log.v(MorpionAndroidActivity.tag, "Dans le onClick");
-		Thread t = null;
-		DataConnexion data = form.getData();
-		Log.v(MorpionAndroidActivity.tag, "données récupérées avant thread : " + data);
-		
-		if (!data.get("pseudo").equals(""))
-		{
-			t = new ThreadActionFormulaire(this, data);
-			t.start();
-		}
-		else
-		{
-			Log.v(MorpionAndroidActivity.tag, "pseudo vide");
-			Toast.makeText(v.getContext(), "Erreur saisir le pseudo", Toast.LENGTH_LONG).show();
-		}
-	}
-
-	public void setChanged() {
-		Log.v(MorpionAndroidActivity.tag, "setchanged ok");
-		super.setChanged();
-	}
-	
-	public void notifyObservers(Object data)
-	{
-		Log.v(MorpionAndroidActivity.tag, "notifyobservers ok");
-		super.notifyObservers(data);
-	}
-}
