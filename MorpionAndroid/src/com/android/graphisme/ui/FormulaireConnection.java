@@ -29,7 +29,7 @@ public class FormulaireConnection extends LinearLayout {
 		form = new Formulaire(context);
 		
 		form.addLigne(new LigneFormulaire(context, "Saisir le pseudo"));
-		optionServeur = new String[] {"192.168.2.65"};
+		optionServeur = new String[] {"85.171.8.208"};
 		form.addLigne(new LigneFormulaire(context, "Saisir ip serveur", optionServeur, InputType.TYPE_CLASS_PHONE));
 		optionPort = new String[] {"8000"};
 		form.addLigne(new LigneFormulaire(context, "Saisir le port", optionPort, InputType.TYPE_CLASS_NUMBER));

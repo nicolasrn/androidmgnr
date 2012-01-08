@@ -105,5 +105,9 @@ public class Jeu extends Thread{
 				Connexion_bdd.envoi_abandon(client2.getJoueur(), client1.getJoueur());
 			}
 		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 }

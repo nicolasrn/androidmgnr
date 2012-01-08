@@ -110,7 +110,7 @@ public class Reception extends Thread
 			    handler.sendMessage(msg);
 			}
 		}
-	
+		
 		Log.v(MorpionAndroidActivity.tag, "fin du jeu dans l'attente de l'historique");
 		Log.v(MorpionAndroidActivity.tag, "dans l'attente de l'historique");
 		String histo = f.getIterpret().reception_historique();
