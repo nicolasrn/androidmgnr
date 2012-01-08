@@ -139,8 +139,7 @@ public class Connexion_bdd {
 				date = result.getString(1);
 				score = result.getString(4);
 				
-				res_retour += j1 + " contre " + j2 + " - le " + date
-						+ " - issue : " + score + ';';
+				res_retour += j1 + "-" + j2 + "-" + date + "-" + score + ';';
 			}
 			return res_retour;
 		} catch (SQLException e) {

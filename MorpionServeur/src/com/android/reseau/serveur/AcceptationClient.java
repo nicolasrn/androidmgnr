@@ -33,6 +33,7 @@ public class AcceptationClient extends Thread
 		{
 			try
 			{
+				System.out.println("acceptation client");
 				client1 = new SocketJoueur(serveur.accept());
 				client2 = new SocketJoueur(serveur.accept());
 				envoieInfo(recupInfo(client1),recupInfo(client2));
@@ -41,6 +42,7 @@ public class AcceptationClient extends Thread
 			}
 			catch (IOException e)
 			{
+				e.printStackTrace();
 				if(client1 == null)
 					System.out.println("client 1 nul");
 				if(client2 == null)

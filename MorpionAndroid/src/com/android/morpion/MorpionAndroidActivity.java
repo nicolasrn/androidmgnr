@@ -37,9 +37,8 @@ public class MorpionAndroidActivity extends Activity implements Observer
 		{
 			view = new ScrollView(this);
 			form = new FormulaireConnection(this);
-			
 			view.addView(form);
-			fen = new FenetreJeu(this);
+			//fen = new FenetreJeu(this);
 			hist = new FenetreHistorique(this);
 		}
 		else
@@ -56,8 +55,6 @@ public class MorpionAndroidActivity extends Activity implements Observer
 		return true;
 	}
 	
-	
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId())
@@ -76,19 +73,21 @@ public class MorpionAndroidActivity extends Activity implements Observer
 	
 	@Override
 	public void update(Observable observable, Object data) {
+		Log.v(tag, "dans le update de MorpionAndroidActivity");
 		if (data instanceof DataConnexion)
 		{
 			//connexion au serveur puis lancer l'interface du morpion
 			DataConnexion dataConnexion = (DataConnexion) data;
-			Log.v(tag, "dans l'update");
+			Log.v(tag, "dans l'update de la fenetre de jeu");
 			//la grille est construite par le serveur (parametres sont juste transmis)
+			fen = new FenetreJeu(this);
 			fen.init(dataConnexion);
 			view.removeAllViews();
 			view.addView(fen);
-			setContentView(view);
 		}
 		else if (data instanceof String)
 		{
+			Log.v(tag, "dans le update de historique");
 			String str = (String)data;
 			hist.init(str);
 			view.removeAllViews();
@@ -96,6 +95,7 @@ public class MorpionAndroidActivity extends Activity implements Observer
 		}
 		else
 		{
+			Log.v(tag, "dans le update du formulaire");
 			view.removeAllViews();
 			form.reset();
 			view.addView(form);

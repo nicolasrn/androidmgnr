@@ -29,86 +29,44 @@ public class Jeu extends Thread{
 		super (nom);
 		g=new Grille_serveur (nb);
 	}
+	
 	/**
 	 * boucle de jeu cotÈ serveur
 	 */
 	public void run(){
+		System.out.println("lancement du jeu");
 		int nbcoup = 0;
 		
 		Controleur_grille c = new Controleur_grille(g);
-		boolean gagnÈ = false;
-		boolean occupe = false; /** indique si la case est occupÈe ou pas*/
-		Coordonnee cord;
-		Pion_vide Object=new Pion_vide();/** sert de rÈfÈrence */
-		Controleur_tour ctrltr = new Controleur_tour (client1,client2);
+		boolean gagne = false, matchNull = false;
+		Controleur_tour ctrltr = new Controleur_tour (client1, client2);
 		
 		try{
-			while (!(gagnÈ || nbcoup == g.getNb_case() * g.getNb_case()))
+			while (!(gagne || matchNull))
 			{
-				System.out.println(g.toString());
+				ctrltr.ordre_jeu();
 				
-				do{
-					/**
-					 * on dit au joueur courant qu'il a le droit de jouer 
-					 */
-					ctrltr.ordre_jeu();
-					
-					/**
-					 * pour le client serveur c'est ici que l'on lit les donnÈes
-					 * envoyÈes par les clients
-					 */
-					
-					cord = ctrltr.getCoordClient();
-					
-					/**
-					 * On teste la case courante est du type Pion_vide
-					 * Si oui on peut remplacer le pion vide par un Pion_ami ou Pion_Ennemi
-					 */
-					if (g.getCase(cord.x, cord.y).getClass()== Object.getClass())
-					{
-						if (ctrltr.gettour() == 1)
-						{
-							g.setCase(cord.x, cord.y, new Pion_Ami());
-														
-						}
-						else 
-						{
-							g.setCase(cord.x, cord.y, new Pion_Ennemi());
-						}
-
-						nbcoup++;
-						if(c.controle(cord.x, cord.y))
-						{
-							gagnÈ = true;
-							//continue;
-							break;
-						}
-						
-						/**
-						 * On envoie la mise ‡ jour de la grille aux joueurs 
-						 * puis on donne la main au joueur suivant
-						 */
-						ctrltr.envoiClientConcurant(cord);
-						ctrltr.tour_suivant();
-						
-					}
+				Coordonnee coord = ctrltr.getCoordClient();
+				if (g.getCase(coord.x, coord.y).getClass().equals(Pion_vide.class))
+					if (ctrltr.gettour() == 1)
+						g.setCase(coord.x, coord.y, new Pion_Ami());					
 					else
-					{
-						occupe = false;
-						System.out.println("Case occupÈe choisir une autre case !!!");
-					}				
-				} while(occupe);
+						g.setCase(coord.x, coord.y, new Pion_Ennemi());
+				
+				gagne = c.controle(coord.x, coord.y);
+				
+				ctrltr.envoiClientConcurant(coord);
+				ctrltr.tour_suivant();
+				nbcoup++;
+				
+				matchNull = (nbcoup == g.getNb_case() * g.getNb_case());
+				System.out.println("grille après modification\n" + g.toString());
 			}
-			
-			System.out.println(nbcoup + "==" + (g.getNb_case() * g.getNb_case()));
-			/**
-			 * envoi au client de qui a gagnÈ ????
-			 */
-			ctrltr.envoiResultat(nbcoup == g.getNb_case() * g.getNb_case());
-			System.out.println("score : \n" + Connexion_bdd.Affiche_score());
+			ctrltr.envoiResultat(matchNull);
 		}
 		catch (IOException e) 
 		{
+			e.printStackTrace();
 			System.out.println("client deco");
 			String msg = "deco";
 			
@@ -129,7 +87,6 @@ public class Jeu extends Thread{
 			{
 				System.out.print("client1 deconnectÈ");
 				Connexion_bdd.envoi_abandon(client1.getJoueur(), client2.getJoueur());
-
 			}
 			
 			//verif client 2

@@ -31,7 +31,8 @@ public class Case extends LinearLayout {
 	{
 		pion.setPionGraphique(p);
 		
-		this.removeView(bouton);
+		while(this.getChildCount() != 0)
+			this.removeAllViews();
 		this.addView(pion, Util.getInstance().getLayoutParamsGrille());
 		
 		pion.invalidate();

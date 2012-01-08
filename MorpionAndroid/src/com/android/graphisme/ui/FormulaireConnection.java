@@ -40,7 +40,7 @@ public class FormulaireConnection extends LinearLayout {
 		optionServeur = new String[] {"192.168.1.43"};
 		form.addLigne(new LigneFormulaire(context, "Saisir ip serveur", optionServeur, InputType.TYPE_CLASS_PHONE));
 		optionPort = new String[] {"8000"};
-		form.addLigne(new LigneFormulaire(context, "Saisir le port", optionPort));
+		form.addLigne(new LigneFormulaire(context, "Saisir le port", optionPort, InputType.TYPE_CLASS_NUMBER));
 		
 		option = new String[] {"Classique", "Crade"};
 		form.addLigne(new LigneFormulaire(context, "version", option));
@@ -293,17 +293,17 @@ class HandlerGuiConnexion extends Handler
 		switch(msg.what)
 		{
 		case 1:
-			Log.v(MorpionAndroidActivity.tag, "handler cas 1");
+			Log.v(MorpionAndroidActivity.tag, "handler desactivation formulaire");
 			actionFormulaire.getForm().desactiverFormulaire();
 			break;
 		case 2:
-			Log.v(MorpionAndroidActivity.tag, "handler cas 2");
+			Log.v(MorpionAndroidActivity.tag, "handler notification observer");
 			DataConnexion data = (DataConnexion) msg.obj;
 			actionFormulaire.setChanged();
 			actionFormulaire.notifyObservers(data);
 			break;
 		case 3:
-			Log.v(MorpionAndroidActivity.tag, "handler cas 3");
+			Log.v(MorpionAndroidActivity.tag, "handler cas activation formulaire");
 			actionFormulaire.getForm().activerFormulaire();
 			break;
 		}

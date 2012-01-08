@@ -27,6 +27,7 @@ public class DialogueClient extends Thread
 		this.j = new Jeu (new Grille_serveur (Serveur.tailleGrille), "processus jeu",client1,client2);
 		start();
 	}
+	
 	/**
 	 * Verifie la grille de jeu via la classe jeu
 	 */

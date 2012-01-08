@@ -47,9 +47,11 @@ public class Controleur_tour {
 	public void ordre_jeu() throws IOException{
 		PrintWriter out;
 		
+		System.out.println("envoie d'un ordre jeu");
 		out = new PrintWriter(tab_socket[tour].getSocket().getOutputStream(), false);
 		out.println("joue");
-		out.flush();		
+		out.flush();
+		System.out.println("fin envoie d'un ordre jeu");
 	}
 	
 	/**
@@ -59,8 +61,9 @@ public class Controleur_tour {
 	 */
 	public Coordonnee getCoordClient() throws IOException
 	{
+		System.out.println("reception coordonnée client");
 		BufferedReader lect1;
-		lect1 = new BufferedReader(new InputStreamReader(tab_socket[tour].getSocket().getInputStream()));
+		lect1 = new BufferedReader(new InputStreamReader(tab_socket[tour].getSocket().getInputStream()), 8*1024);
 		return new Coordonnee (lect1.readLine());
 	}
 	
@@ -72,12 +75,13 @@ public class Controleur_tour {
 	 */
 	public void envoiClientConcurant (Coordonnee c) throws IOException
 	{
+		System.out.println("envoie des coordonnées au client suivant");
 		PrintWriter out;
 		out = new PrintWriter(tab_socket[(tour+1) % 2].getSocket().getOutputStream(), false);
-
+		
 		out.println(c.toString());
 		out.flush();
-		
+		System.out.println("fin envoie des coordonnées au client suivant");
 	}
 	
 	public int gettour()
@@ -92,37 +96,49 @@ public class Controleur_tour {
 	public void envoiResultat(boolean matchNull) throws IOException
 	{
 		PrintWriter out,outg;
-		outg = new PrintWriter(tab_socket[tour].getSocket().getOutputStream(), false);
-		out = new PrintWriter(tab_socket[(tour+1) % 2].getSocket().getOutputStream(), false);
-		
+		outg = new PrintWriter(tab_socket[(tour+1)%2].getSocket().getOutputStream(), false);
+		out = new PrintWriter(tab_socket[tour].getSocket().getOutputStream(), false);
 		
 		if (!matchNull)
 		{
 			//le gagnant est le joueur courant
+			System.out.println("envoie de la victoire");
 			outg.println("win");
 			outg.flush();
+			System.out.println("fin envoie de la victoire");
 			
-			Connexion_bdd.envoi_gagne(tab_socket[tour].getJoueur(), tab_socket[(tour+1)%2].getJoueur());
+			Connexion_bdd.envoi_gagne(tab_socket[(tour+1)%2].getJoueur(), tab_socket[tour].getJoueur());
 			
 			// le perdant
+			System.out.println("envoie de la defaite");
 			out.println("lose");
 			out.flush();
+			System.out.println("fin envoie de la defaite");
 		}
 		else
 		{
 			//le gagnant est le joueur courant
+			System.out.println("envoie du match null 1");
 			outg.println("matchnull");
 			outg.flush();
+			System.out.println("fin envoie du match null 1");
 			
 			Connexion_bdd.envoi_nul(tab_socket[tour].getJoueur(), tab_socket[(tour+1)%2].getJoueur());
 			
 			// le perdant
+			System.out.println("envoie du match null 2");
 			out.println("matchnull");
 			out.flush();
+			System.out.println("fin envoie du match null 2");
 		}
+		System.out.println("envoie score perdant");
 		out.println(Connexion_bdd.Affiche_score());
 		out.flush();
+		System.out.println("fin envoie score perdant");
+		
+		System.out.println("envoie score gagnant");
 		outg.println(Connexion_bdd.Affiche_score());
 		outg.flush();
+		System.out.println("fin envoie score gagnant");
 	}
 }

@@ -34,7 +34,7 @@ public class Transmission
 		try 
 		{
 			//envoie de la coordonnée par le client
-			System.out.println(Grille.coord);
+			//System.out.println(Grille.coord);
 			f.getIterpret().envoi_serveur(Grille.coord);
 			
 			f.getGrille().desactiverGrille();

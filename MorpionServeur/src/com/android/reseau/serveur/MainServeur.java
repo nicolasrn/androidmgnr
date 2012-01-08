@@ -13,6 +13,7 @@ public class MainServeur
 		//System.out.println(Connexion_bdd.Affiche_score());
 		try 
 		{
+			System.out.println("lancement du serveur");
 			new Serveur();
 		}
 		catch (IOException e) 
