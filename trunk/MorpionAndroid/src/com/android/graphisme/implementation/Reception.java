@@ -13,6 +13,7 @@ import android.util.Log;
 import com.android.graphisme.ui.FenetreJeu;
 import com.android.metier.Coordonnee;
 import com.android.morpion.MorpionAndroidActivity;
+import com.android.morpion.MorpionJeuActivity;
 
 /**
  * implementation de l'ecouteur reseau -> client pour la mise a jour de l'état graphique
@@ -153,7 +154,7 @@ class EnvoyerHistorique extends Observable
 {
 	public EnvoyerHistorique(FenetreJeu f)
 	{
-		this.addObserver((MorpionAndroidActivity)f.getContext());
+		this.addObserver((MorpionJeuActivity)f.getContext());
 	}
 	
 	public void notifyObserv(Object data)

@@ -1,13 +1,17 @@
 package com.android.graphisme.composant;
 
-import com.android.morpion.MorpionAndroidActivity;
+import java.io.Serializable;
 
+import com.android.morpion.MorpionAndroidActivity;
+import com.android.morpion.MorpionJeuActivity;
+
+import android.app.Activity;
 import android.content.Context;
 import android.view.Display;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 
-public class Util {
+public class Util implements Serializable {
 	private LinearLayout.LayoutParams layoutParamsBandeau;
 	private LinearLayout.LayoutParams layoutParamsGrille;
 	@SuppressWarnings("unused")
@@ -22,7 +26,7 @@ public class Util {
 		this.context = context;
 		this.nbligne = nbligne;
 		
-		Display ecran = ((MorpionAndroidActivity)context).getWindowManager().getDefaultDisplay();
+		Display ecran = ((Activity)context).getWindowManager().getDefaultDisplay();
 		int largeur= ecran.getWidth();
 		int hauteur= ecran.getHeight();
 		int taille = Math.min(largeur, hauteur)/nbligne;

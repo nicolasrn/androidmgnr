@@ -3,6 +3,7 @@ package com.android.graphisme.ui;
 import java.util.Observable;
 
 import com.android.morpion.MorpionAndroidActivity;
+import com.android.morpion.MorpionFenetreHistoriqueActivity;
 
 import android.content.Context;
 import android.view.View;
@@ -31,7 +32,7 @@ public class FenetreHistorique extends LinearLayout {
 
 		public ContinuerHistorique() {
 			super();
-			this.addObserver((MorpionAndroidActivity)getContext());
+			this.addObserver((MorpionFenetreHistoriqueActivity)getContext());
 		}
 
 		@Override

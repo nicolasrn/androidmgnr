@@ -68,6 +68,10 @@ public class DialogueClient extends Thread
 		{
 			e.printStackTrace();
 		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 }
