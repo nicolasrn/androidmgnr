@@ -2,6 +2,7 @@ package com.android.graphisme.ui.impl.formulaire;
 
 import java.util.Observable;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -10,6 +11,8 @@ import android.widget.Toast;
 import com.android.graphisme.ui.FormulaireConnection;
 import com.android.metier.DataConnexion;
 import com.android.morpion.MorpionAndroidActivity;
+import com.android.morpion.MorpionConnexionActivity;
+import com.android.morpion.MorpionJeuActivity;
 
 public class ActionFormulaire extends Observable implements OnClickListener
 {
@@ -17,7 +20,7 @@ public class ActionFormulaire extends Observable implements OnClickListener
 	
 	public ActionFormulaire(FormulaireConnection formulaireConnection) {
 		this.form = formulaireConnection;
-		this.addObserver((MorpionAndroidActivity)form.getContext());
+		this.addObserver((MorpionConnexionActivity)form.getContext());
 	}
 
 	public FormulaireConnection getForm() {

@@ -3,8 +3,12 @@ package com.android.reseau.client;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.Serializable;
 import java.net.InetAddress;
+import java.net.Proxy;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.SocketImpl;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
@@ -21,6 +25,7 @@ import com.android.reseau.interpretation.Interpreteur;
  * 
  */
 public class Client {
+	private static final long serialVersionUID = 1L;
 	private String pseudo, type, host;
 	private int port;
 	private Socket connectiona;

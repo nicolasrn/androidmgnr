@@ -3,5 +3,6 @@
 
     <string name="hello">Hello World, MorpionAndroidActivity!</string>
     <string name="app_name">MorpionAndroid</string>
+    <string name="newParty">Commencer une partie</string>
 
 </resources>

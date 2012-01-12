@@ -12,6 +12,7 @@ import com.android.metier.DataConnexion;
 import com.android.reseau.client.Client;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,9 +20,12 @@ import android.os.HandlerThread;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ScrollView;
 
-public class MorpionAndroidActivity extends Activity implements Observer
+public class MorpionAndroidActivity extends Activity //implements Observer
 {
 	public static final String tag = "MorpionAndroidActivity";
 	private FormulaireConnection form;
@@ -34,24 +38,19 @@ public class MorpionAndroidActivity extends Activity implements Observer
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		Log.v(tag, "savedInstanceState : " + (savedInstanceState == null));
+		//Log.v(tag, "savedInstanceState : " + (savedInstanceState == null));
 		super.onCreate(savedInstanceState);
-		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE)
+		//this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE)
 		
-		if (savedInstanceState == null)
-		{
-			view = new ScrollView(this);
-			form = new FormulaireConnection(this);
-			view.addView(form);
-			fen = new FenetreJeu(this);
-			hist = new FenetreHistorique(this);
-		}
-		else
-		{
-			Log.v(tag, "onCreate avant view : " + (view == null));
-			Log.v(tag, "onCreate apres view : " + (view == null));
-		}
-		setContentView(view);
+		setContentView(R.layout.main);
+		Button b = (Button) this.findViewById(R.id.button1);
+		b.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(MorpionAndroidActivity.this, MorpionConnexionActivity.class);
+				startActivity(intent);
+			}
+		});
 	}
 	
 	@Override
@@ -71,34 +70,4 @@ public class MorpionAndroidActivity extends Activity implements Observer
 		return false;
 	}
 	
-	@Override
-	public void update(Observable observable, Object data) {
-		Log.v(tag, "dans le update de MorpionAndroidActivity");
-		if (data instanceof DataConnexion)
-		{
-			//connexion au serveur puis lancer l'interface du morpion
-			DataConnexion dataConnexion = (DataConnexion) data;
-			Log.v(tag, "dans l'update de la fenetre de jeu");
-			//la grille est construite par le serveur (parametres sont juste transmis)
-			fen = new FenetreJeu(this);
-			fen.init(dataConnexion);
-			view.removeAllViews();
-			view.addView(fen);
-		}
-		else if (data instanceof String)
-		{
-			Log.v(tag, "dans le update de historique");
-			String str = (String)data;
-			hist.init(str);
-			view.removeAllViews();
-			view.addView(hist);
-		}
-		else
-		{
-			Log.v(tag, "dans le update du formulaire");
-			view.removeAllViews();
-			form.reset();
-			view.addView(form);
-		}
-	}
 }

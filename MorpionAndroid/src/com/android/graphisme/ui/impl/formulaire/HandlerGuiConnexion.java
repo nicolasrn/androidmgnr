@@ -29,6 +29,10 @@ public class HandlerGuiConnexion extends Handler
 			DataConnexion data = (DataConnexion) msg.obj;
 			actionFormulaire.setChanged();
 			actionFormulaire.notifyObservers(data);
+
+			//Intent intent = new Intent(actionFormulaire.getForm().getContext(), MorpionJeuActivity.class);
+			//intent.putExtra("data", data);
+			//actionFormulaire.getForm().getContext().startActivity(intent);
 			break;
 		case 3:
 			Log.v(MorpionAndroidActivity.tag, "handler cas activation formulaire");
