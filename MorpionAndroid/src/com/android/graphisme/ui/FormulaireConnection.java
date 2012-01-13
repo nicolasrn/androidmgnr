@@ -34,7 +34,7 @@ public class FormulaireConnection extends LinearLayout {
 		optionPort = new String[] {"8000"};
 		form.addLigne(new LigneFormulaire(context, "Saisir le port", optionPort, InputType.TYPE_CLASS_NUMBER));
 		
-		option = new String[] {"Classique", "Simpson"};
+		option = new String[] {"Classique", "Simpson", "Nounours", "Star Wars"};
 		form.addLigne(new LigneFormulaire(context, "version", option));
 		this.addView(form);
 		boutonValider = new Button(context);
