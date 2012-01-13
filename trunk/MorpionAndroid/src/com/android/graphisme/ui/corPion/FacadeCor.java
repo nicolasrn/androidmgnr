@@ -9,6 +9,8 @@ public class FacadeCor {
 		{
 			cor = new CorPionClassique();
 			cor = new CorPionSimpson(cor);
+			cor = new CorPionNounours(cor);
+			cor = new CorPionStarWars(cor);
 		}
 		
 		return cor;
