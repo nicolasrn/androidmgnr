@@ -3,27 +3,27 @@ package com.android.graphisme.ui.corPion;
 import android.content.Context;
 
 import com.android.graphisme.composant.pion.PionGraphique;
-import com.android.graphisme.composant.pion.PionJ1;
-import com.android.graphisme.composant.pion.PionJ2;
+import com.android.graphisme.composant.pion.PionJ1Simpson;
+import com.android.graphisme.composant.pion.PionJ2Simpson;
 
-public class CorPionClassique extends COR
+public class CorPionSimpson extends COR
 {
-	public CorPionClassique() {
+	public CorPionSimpson() {
 		super();
 	}
 
-	public CorPionClassique(COR suivant) {
+	public CorPionSimpson(COR suivant) {
 		super(suivant);
 	}
 
 	@Override
 	protected PionGraphique[] _resoudre(String pb, Context context) {
 		PionGraphique tab[] = null;
-		if (pb.trim().equals("Classique"))
+		if (pb.trim().equals("Simpson"))
 		{
 			tab = new PionGraphique[2];
-			tab[0] = new PionJ1(context);
-			tab[1] = new PionJ2(context);
+			tab[0] = new PionJ1Simpson(context);
+			tab[1] = new PionJ2Simpson(context);
 		}
 		return tab;
 	}

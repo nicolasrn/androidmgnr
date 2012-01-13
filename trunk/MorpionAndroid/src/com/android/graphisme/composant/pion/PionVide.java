@@ -1,4 +1,5 @@
-package com.android.graphisme.composant;
+package com.android.graphisme.composant.pion;
+
 
 import android.content.res.Resources;
 import android.graphics.Canvas;

@@ -1,5 +1,7 @@
 package com.android.graphisme.composant;
 
+import com.android.graphisme.composant.pion.PionGraphique;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.widget.LinearLayout;

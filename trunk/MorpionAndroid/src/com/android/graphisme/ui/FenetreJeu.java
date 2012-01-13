@@ -2,8 +2,8 @@ package com.android.graphisme.ui;
 
 import com.android.graphisme.composant.BandeauPresentation;
 import com.android.graphisme.composant.Grille;
-import com.android.graphisme.composant.PionGraphique;
 import com.android.graphisme.composant.Util;
+import com.android.graphisme.composant.pion.PionGraphique;
 import com.android.graphisme.implementation.Reception;
 import com.android.graphisme.implementation.Transmission;
 import com.android.graphisme.ui.corPion.FacadeCor;
