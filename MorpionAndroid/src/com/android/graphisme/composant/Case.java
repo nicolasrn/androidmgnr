@@ -1,5 +1,6 @@
 package com.android.graphisme.composant;
 
+import com.android.graphisme.composant.pion.PionGraphique;
 import com.android.metier.Coordonnee;
 
 import android.content.Context;

@@ -2,7 +2,7 @@ package com.android.graphisme.ui.corPion;
 
 import android.content.Context;
 
-import com.android.graphisme.composant.PionGraphique;
+import com.android.graphisme.composant.pion.PionGraphique;
 
 public abstract class COR {
 	private COR suivant;

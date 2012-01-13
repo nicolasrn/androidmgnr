@@ -1,5 +1,6 @@
-package com.android.graphisme.composant;
+package com.android.graphisme.composant.pion;
 
+import com.android.graphisme.composant.Util;
 import com.android.morpion.R;
 
 import android.content.Context;
@@ -10,9 +11,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
-public class PionJ1Deg extends PionGraphique {
+public class PionJ1Simpson extends PionGraphique {
 	
-	public PionJ1Deg(Context context) {
+	public PionJ1Simpson(Context context) {
 		super(context);
 		//if (imageType1 == null)
 			imageType1 = BitmapFactory.decodeResource(this.context.getResources(), R.drawable.oqqmkefn);

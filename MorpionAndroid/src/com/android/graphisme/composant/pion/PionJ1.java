@@ -1,5 +1,6 @@
-package com.android.graphisme.composant;
+package com.android.graphisme.composant.pion;
 
+import com.android.graphisme.composant.Util;
 import com.android.morpion.R;
 
 import android.content.Context;

@@ -8,7 +8,7 @@ public class FacadeCor {
 		if (cor == null)
 		{
 			cor = new CorPionClassique();
-			cor = new CorPionDeg(cor);
+			cor = new CorPionSimpson(cor);
 		}
 		
 		return cor;
