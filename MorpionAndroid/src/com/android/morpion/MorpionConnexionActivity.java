@@ -6,17 +6,18 @@ import java.util.Observer;
 import com.android.graphisme.ui.FormulaireConnection;
 import com.android.metier.DataConnexion;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-public class MorpionConnexionActivity extends Activity implements Observer {
+public class MorpionConnexionActivity extends ActivityGlobale implements Observer {
 	private DataConnexion data;
+	private FormulaireConnection form = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(new FormulaireConnection(this));
+		form = new FormulaireConnection(this);
+		setContentView(form);
 	}
 
 	@Override

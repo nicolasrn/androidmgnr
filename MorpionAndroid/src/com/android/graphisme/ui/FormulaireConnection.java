@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.android.graphisme.ui.impl.formulaire.ActionFormulaire;
 import com.android.metier.DataConnexion;
 import com.android.morpion.MorpionAndroidActivity;
+import com.android.morpion.MyApp;
 
 import android.content.Context;
 import android.text.InputType;
@@ -19,8 +20,11 @@ import android.widget.TextView;
 
 public class FormulaireConnection extends LinearLayout {
 	private Formulaire form;
+	
 	private Button boutonValider;
-	private String optionServeur[], optionPort[];
+	private String optionNom[];
+	private String optionServeur[];
+	private String optionPort[];
 	private String option[];
 	
 	public FormulaireConnection(Context context) {
@@ -28,14 +32,30 @@ public class FormulaireConnection extends LinearLayout {
 		this.setOrientation(LinearLayout.VERTICAL);
 		form = new Formulaire(context);
 		
-		form.addLigne(new LigneFormulaire(context, "Saisir le pseudo"));
-		optionServeur = new String[] {"10.14.53.49"};
+		MyApp app = (MyApp)context.getApplicationContext();
+		
+		if (app.getData() == null)
+		{
+			optionNom = new String[] {"toto"};
+			optionServeur = new String[] {"192.168.1.43"};
+			optionPort = new String[] {"8000"};
+		}
+		else
+		{
+			optionNom = new String[] { app.getData().getPseudo() };
+			optionServeur = new String[] {app.getData().getIp() };
+			optionPort = new String[] {app.getData().getPort() };
+		}
+		option = new String[] {"Classique", "Simpson", "Nounours", "Star Wars"};
+		
+		form.addLigne(new LigneFormulaire(context, "Saisir le pseudo", optionNom));
+		
 		form.addLigne(new LigneFormulaire(context, "Saisir ip serveur", optionServeur, InputType.TYPE_CLASS_PHONE));
-		optionPort = new String[] {"8000"};
+		
 		form.addLigne(new LigneFormulaire(context, "Saisir le port", optionPort, InputType.TYPE_CLASS_NUMBER));
 		
-		option = new String[] {"Classique", "Simpson", "Nounours", "Star Wars"};
 		form.addLigne(new LigneFormulaire(context, "version", option));
+		
 		this.addView(form);
 		boutonValider = new Button(context);
 		boutonValider.setText("Valider");
@@ -49,6 +69,10 @@ public class FormulaireConnection extends LinearLayout {
 	public DataConnexion getData()
 	{
 		//Log.v(MorpionAndroidActivity.tag, "id du selectionné : " + Integer.parseInt(form.get(3).getData()) + "");
+		optionNom[0] = form.get(0).getData();
+		optionServeur[0] = form.get(1).getData().equals("") ? optionServeur[0] : form.get(1).getData(); 
+		optionPort[0] = form.get(2).getData().equals("") ? optionPort[0] : form.get(2).getData();
+		//option[Integer.parseInt(form.get(3).getData())];
 		
 		return new DataConnexion(form.get(0).getData(), 
 				form.get(1).getData().equals("") ? optionServeur[0] : form.get(1).getData(), 

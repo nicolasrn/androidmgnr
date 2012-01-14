@@ -4,16 +4,14 @@ import java.util.Observable;
 import java.util.Observer;
 
 import com.android.graphisme.ui.FenetreJeu;
-import com.android.graphisme.ui.FormulaireConnection;
 import com.android.metier.DataConnexion;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-public class MorpionJeuActivity extends Activity implements Observer {
-
+public class MorpionJeuActivity extends ActivityGlobale implements Observer {
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -21,9 +19,7 @@ public class MorpionJeuActivity extends Activity implements Observer {
 		//Log.v(MorpionAndroidActivity.tag, "" + getApplicationContext().getClass());
 		MyApp app = ((MyApp)getApplicationContext());
 	    DataConnexion data = app.getData();
-	    
-		FenetreJeu f = new FenetreJeu(this, data);
-		setContentView(f);
+	    setContentView(new FenetreJeu(this, data));
 	}
 
 	@Override

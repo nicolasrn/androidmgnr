@@ -4,7 +4,7 @@ import com.android.metier.DataConnexion;
 
 import android.app.Application;
 
-public class MyApp extends Application {
+public class MyApp extends Application{
 	private DataConnexion data;
 
 	public DataConnexion getData() {
