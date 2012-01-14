@@ -2,7 +2,6 @@ package com.android.graphisme.ui;
 
 import java.util.Observable;
 
-import com.android.morpion.MorpionAndroidActivity;
 import com.android.morpion.MorpionFenetreHistoriqueActivity;
 
 import android.content.Context;
