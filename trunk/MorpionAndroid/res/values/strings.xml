@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">Hello World, MorpionAndroidActivity!</string>
+    <string name="hello">Bienvenue sur le Morpion Android</string>
     <string name="app_name">MorpionAndroid</string>
     <string name="newParty">Commencer une partie</string>
 
